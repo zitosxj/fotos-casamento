@@ -336,7 +336,8 @@ photoInput.addEventListener(
 
 async function compressImage(file) {
 
-  // Até 8 MB → enviar original
+  // Fotos até 8 MB seguem no formato original
+
   const MAX_ORIGINAL_BYTES =
     8 * 1024 * 1024;
 
@@ -348,15 +349,12 @@ async function compressImage(file) {
   }
 
 
-  // ==========================================
-  // FOTO GRANDE → OTIMIZAR
-  // ==========================================
+  // Fotos maiores são otimizadas
 
   const image =
     await createImageBitmap(file);
 
 
-  // Máximo de 4000 px
   const maxSize = 4000;
 
 
@@ -367,7 +365,9 @@ async function compressImage(file) {
   if (width > height && width > maxSize) {
 
     height =
-      Math.round(height * maxSize / width);
+      Math.round(
+        height * maxSize / width
+      );
 
     width = maxSize;
 
@@ -377,7 +377,9 @@ async function compressImage(file) {
   if (height > width && height > maxSize) {
 
     width =
-      Math.round(width * maxSize / height);
+      Math.round(
+        width * maxSize / height
+      );
 
     height = maxSize;
 
@@ -386,6 +388,7 @@ async function compressImage(file) {
 
   const canvas =
     document.createElement("canvas");
+
 
   canvas.width = width;
   canvas.height = height;
@@ -408,15 +411,33 @@ async function compressImage(file) {
 
 
   const blob =
-    await new Promise(resolve => {
+    await new Promise(
+      (resolve, reject) => {
 
-      canvas.toBlob(
-        resolve,
-        "image/jpeg",
-        0.95
-      );
+        canvas.toBlob(
+          blob => {
 
-    });
+            if (blob) {
+
+              resolve(blob);
+
+            } else {
+
+              reject(
+                new Error(
+                  "Não foi possível processar esta fotografia."
+                )
+              );
+
+            }
+
+          },
+          "image/jpeg",
+          0.95
+        );
+
+      }
+    );
 
 
   image.close();
@@ -454,6 +475,167 @@ function blobToBase64(blob) {
       reader.readAsDataURL(blob);
     }
   );
+}
+
+// ==========================================
+// 📊 INICIAR PROGRESSO
+// ==========================================
+
+function startUploadProgress(files) {
+
+  uploadProgress.classList.remove("hidden");
+
+  uploadProgressText.textContent =
+    `A preparar ${files.length} fotografia(s)...`;
+
+  uploadProgressBar.style.width = "0%";
+
+  uploadProgressPercent.textContent = "0%";
+
+  uploadProgressList.innerHTML = "";
+
+
+  files.forEach(
+    (file, index) => {
+
+      const item =
+        document.createElement("div");
+
+
+      item.className =
+        "upload-progress-item waiting";
+
+
+      item.id =
+        `upload-item-${index}`;
+
+
+      const icon =
+        document.createElement("span");
+
+      icon.className =
+        "upload-progress-icon";
+
+      icon.textContent = "⬜";
+
+
+      const name =
+        document.createElement("span");
+
+      name.className =
+        "upload-progress-name";
+
+      name.textContent =
+        file.name;
+
+
+      const status =
+        document.createElement("span");
+
+      status.className =
+        "upload-progress-status";
+
+      status.textContent =
+        "A aguardar";
+
+
+      item.appendChild(icon);
+      item.appendChild(name);
+      item.appendChild(status);
+
+      uploadProgressList.appendChild(item);
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// 📊 ATUALIZAR FOTO
+// ==========================================
+
+function updateUploadItem(
+  index,
+  state,
+  message
+) {
+
+  const item =
+    document.getElementById(
+      `upload-item-${index}`
+    );
+
+
+  if (!item) return;
+
+
+  item.className =
+    `upload-progress-item ${state}`;
+
+
+  const icon =
+    item.querySelector(
+      ".upload-progress-icon"
+    );
+
+
+  const status =
+    item.querySelector(
+      ".upload-progress-status"
+    );
+
+
+  const icons = {
+
+    waiting: "⬜",
+    preparing: "⚙️",
+    uploading: "📤",
+    checking: "🔎",
+    success: "✅",
+    error: "❌"
+
+  };
+
+
+  icon.textContent =
+    icons[state] || "⬜";
+
+
+  status.textContent =
+    message;
+
+}
+
+
+// ==========================================
+// 📊 ATUALIZAR BARRA
+// ==========================================
+
+function updateUploadProgress(
+  completed,
+  total
+) {
+
+  const percent =
+    total > 0
+      ? Math.round(
+          (completed / total) * 100
+        )
+      : 0;
+
+
+  uploadProgressBar.style.width =
+    `${percent}%`;
+
+
+  uploadProgressPercent.textContent =
+    `${percent}%`;
+
+
+  uploadProgressText.textContent =
+    `${completed} de ${total} fotografia(s) processada(s)`;
+
 }
 
 // ==========================================
@@ -742,17 +924,13 @@ function updateUploadProgress(
 }
 
 // ==========================================
-// 📤 ENVIAR FOTOS COM CONFIRMAÇÃO
+// 📤 ENVIAR FOTOS COM PROGRESSO
 // ==========================================
 
 uploadButton.addEventListener(
   "click",
   async () => {
 
-
-    // ======================================
-    // VALIDAR
-    // ======================================
 
     if (!selectedFiles.length) {
 
@@ -764,15 +942,22 @@ uploadButton.addEventListener(
     }
 
 
-    // ======================================
-    // BLOQUEAR BOTÃO
-    // ======================================
+    // Bloquear botão durante o envio
 
     uploadButton.disabled = true;
 
 
-    let sent = 0;
+    // Limpar mensagem anterior
 
+    uploadStatus.textContent = "";
+
+
+    // Criar lista de progresso
+
+    startUploadProgress(selectedFiles);
+
+
+    let sent = 0;
     let failed = 0;
 
 
@@ -780,7 +965,7 @@ uploadButton.addEventListener(
 
 
     // ======================================
-    // ENVIAR UMA A UMA
+    // ENVIAR UMA FOTO DE CADA VEZ
     // ======================================
 
     for (
@@ -797,54 +982,43 @@ uploadButton.addEventListener(
       try {
 
 
-        // ==================================
+        // -------------------------------
         // PREPARAR
-        // ==================================
+        // -------------------------------
 
-        uploadStatus.innerHTML =
-          `⏳ <strong>${index + 1} de ${selectedFiles.length}</strong><br>` +
-          `A preparar:<br>` +
-          `📸 ${escapeHtml_(file.name)}`;
+        updateUploadItem(
+          index,
+          "preparing",
+          "A preparar..."
+        );
 
 
-        const compressed =
+        const processedFile =
           await compressImage(file);
 
 
+        // -------------------------------
+        // CONVERTER
+        // -------------------------------
+
         const base64 =
-          await blobToBase64(compressed);
+          await blobToBase64(processedFile);
 
 
-        // ==================================
-        // ID ÚNICO DESTE ENVIO
-        // ==================================
-
-        const uploadId =
-          crypto.randomUUID ?
-            crypto.randomUUID() :
-            (
-              Date.now().toString(36) +
-              Math.random()
-                .toString(36)
-                .slice(2)
-            );
-
-
-        // ==================================
+        // -------------------------------
         // ENVIAR
-        // ==================================
+        // -------------------------------
 
-        uploadStatus.innerHTML =
-          `📤 <strong>${index + 1} de ${selectedFiles.length}</strong><br>` +
-          `A enviar:<br>` +
-          `📸 ${escapeHtml_(file.name)}`;
+        updateUploadItem(
+          index,
+          "uploading",
+          "A enviar..."
+        );
 
 
         const payload = {
 
           code: EVENT_CODE,
-
-          uploadId: uploadId,
 
           participant:
             participantName.value.trim(),
@@ -853,6 +1027,8 @@ uploadButton.addEventListener(
             file.name,
 
           mimeType:
+            processedFile.type ||
+            file.type ||
             "image/jpeg",
 
           data:
@@ -883,88 +1059,18 @@ uploadButton.addEventListener(
         );
 
 
-        // ==================================
-        // AGUARDAR PROCESSAMENTO
-        // ==================================
-
-        uploadStatus.innerHTML =
-          `🔎 <strong>${index + 1} de ${selectedFiles.length}</strong><br>` +
-          `A confirmar o envio:<br>` +
-          `📸 ${escapeHtml_(file.name)}`;
-
-
-        let result = null;
-
-
-        // Tentar confirmar durante alguns segundos
-
-        for (
-          let attempt = 0;
-          attempt < 10;
-          attempt++
-        ) {
-
-
-          await new Promise(
-            resolve =>
-              setTimeout(resolve, 1000)
-          );
-
-
-          result =
-            await checkUploadStatus(uploadId);
-
-
-          if (
-            result.status !== "processing"
-          ) {
-
-            break;
-
-          }
-
-        }
-
-
-        // ==================================
+        // -------------------------------
         // SUCESSO
-        // ==================================
+        // -------------------------------
 
-        if (
-          result &&
-          result.ok &&
-          result.status === "success"
-        ) {
-
-          sent++;
-
-          uploadStatus.innerHTML =
-            `✅ <strong>${sent} fotografia(s) enviada(s)</strong><br>` +
-            `Última fotografia:<br>` +
-            `📸 ${escapeHtml_(file.name)}`;
+        sent++;
 
 
-          continue;
-
-        }
-
-
-        // ==================================
-        // FALHA CONFIRMADA
-        // ==================================
-
-        failed++;
-
-
-        const errorMessage =
-          result?.error ||
-          "Não foi possível confirmar o envio.";
-
-
-        failedFiles.push({
-          name: file.name,
-          error: errorMessage
-        });
+        updateUploadItem(
+          index,
+          "success",
+          "Enviada"
+        );
 
 
       } catch (error) {
@@ -980,13 +1086,28 @@ uploadButton.addEventListener(
         failed++;
 
 
+        updateUploadItem(
+          index,
+          "error",
+          "Não foi possível enviar"
+        );
+
+
         failedFiles.push({
+          index: index,
           name: file.name,
-          error:
-            getFriendlyUploadError(error)
+          error: error
         });
 
       }
+
+
+      // Atualizar barra depois de cada foto
+
+      updateUploadProgress(
+        index + 1,
+        selectedFiles.length
+      );
 
     }
 
@@ -995,15 +1116,15 @@ uploadButton.addEventListener(
     // RESULTADO FINAL
     // ======================================
 
-    if (!failed) {
+    if (failed === 0) {
 
 
       uploadStatus.innerHTML =
-        `💗 <strong>Tudo pronto!</strong><br><br>` +
-        `✅ ${sent} fotografia(s) enviada(s) com sucesso! 📸🦆`;
+        `💗 <strong>Tudo pronto!</strong><br>` +
+        `✅ ${sent} fotografia(s) enviada(s) com sucesso! 📸`;
 
 
-      // Limpar seleção apenas se tudo correu bem
+      // Limpar seleção
 
       selectedFiles = [];
 
@@ -1017,57 +1138,46 @@ uploadButton.addEventListener(
     } else {
 
 
-      let message =
-        `<strong>Resultado do envio:</strong><br><br>` +
-        `✅ Enviadas: ${sent}<br>` +
-        `❌ Com problema: ${failed}`;
-
-
-      message +=
-        `<br><br><strong>Fotografias com problema:</strong><br>`;
-
-
-      failedFiles.forEach(
-        item => {
-
-          message +=
-            `<br>❌ 📸 ${escapeHtml_(item.name)}` +
-            `<br><small>${escapeHtml_(item.error)}</small>`;
-
-        }
-      );
-
-
       uploadStatus.innerHTML =
-        message;
+        `<strong>Resultado:</strong><br>` +
+        `✅ ${sent} enviada(s)<br>` +
+        `❌ ${failed} com problema`;
+
 
     }
 
 
-    // ======================================
-    // REATIVAR BOTÃO
-    // ======================================
+    // Reativar botão
 
     uploadButton.disabled = false;
+
 
     // ======================================
     // ATUALIZAR GALERIA
     // ======================================
 
     if (sent > 0) {
+
       setTimeout(
         () => {
+
           if (
             !gallerySection.classList.contains("hidden")
           ) {
+
             loadGallery();
+
           }
+
         },
         3000
       );
+
     }
+
   }
 );
+
 // ==========================================
 // CARREGAR GALERIA COM JSONP
 // ==========================================
