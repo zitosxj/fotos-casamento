@@ -70,39 +70,66 @@ button {
 
 }
 
-
 /* ===============================
-   FLORES
+   DECORAÇÃO FLORAL
 ================================ */
 
-.flowers {
-
+.floral {
   position: fixed;
-
-  z-index: 0;
-
-  font-size: 34px;
-
-  opacity: .65;
-
+  width: 180px;
+  height: 180px;
   pointer-events: none;
+  z-index: 0;
+  opacity: .75;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      #f7a7b9 0 14px,
+      transparent 15px
+    ),
+    radial-gradient(
+      circle at 55% 20%,
+      #ffd7df 0 22px,
+      transparent 23px
+    ),
+    radial-gradient(
+      circle at 75% 45%,
+      #ee829d 0 12px,
+      transparent 13px
+    ),
+    radial-gradient(
+      circle at 40% 70%,
+      #f8c2cf 0 25px,
+      transparent 26px
+    );
+  filter: blur(.3px);
+}
 
+.floral-top-left {
+  top: -45px;
+  left: -45px;
 }
 
 
-.flowers-top-left {
-
-  top: 10px;
-  left: 10px;
-
+.floral-top-right {
+  top: -45px;
+  right: -45px;
+  transform: scaleX(-1);
 }
 
 
-.flowers-top-right {
+.floral-bottom-left {
+  bottom: -45px;
+  left: -45px;
+  transform: rotate(180deg);
+}
 
-  top: 10px;
-  right: 10px;
-
+.floral-bottom-right {
+  bottom: -45px;
+  right: -45px;
+  transform:
+    rotate(180deg)
+    scaleX(-1);
 }
 
 
@@ -1050,40 +1077,48 @@ button {
 @media (max-width: 600px) {
 
   .header {
-
     grid-template-columns: 45px 1fr 95px;
-
   }
 
   .header-title {
-
     font-size: 19px;
-
   }
 
   .header-title strong {
-
     font-size: 30px;
-
   }
 
   .header-family {
-
     font-size: 18px;
-
   }
 
   .content-card {
-
     padding: 28px 18px;
-
   }
 
   .gallery-grid {
-
     grid-template-columns:
       repeat(3, 1fr);
-
   }
 
+   .wedding-family img {
+    width: min(100%, 360px);
+    max-height: 370px;
+  }
+
+  .header-family {
+    height: 65px;
+  }
+
+
+  .header-family img {
+    width: 105px;
+    max-height: 65px;
+  }
+
+
+  .floral {
+    width: 130px;
+    height: 130px;
+  }
 }
