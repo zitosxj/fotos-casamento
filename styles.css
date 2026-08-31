@@ -1,1 +1,1306 @@
-*{box-sizing:border-box}body{margin:0;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}.container{max-width:620px;margin:0 auto;padding:28px 18px 40px}.hero{text-align:center;padding:18px 8px 22px}.badge{font-size:42px}.hero h1{margin:8px 0;font-size:30px;letter-spacing:-.5px}.hero p{margin:0;color:#6b7280;line-height:1.5}.card{background:#fff;border-radius:22px;padding:20px;box-shadow:0 8px 30px rgba(0,0,0,.07)}.upload-box{border:2px dashed #d1d5db;border-radius:18px;padding:28px 16px;text-align:center;display:flex;flex-direction:column;gap:6px;cursor:pointer}.upload-box:active{transform:scale(.99)}.upload-icon{font-size:34px;line-height:1}.upload-box small{color:#6b7280}input[type=file]{display:none}.field{display:block;margin-top:18px}.field span{display:block;font-size:14px;font-weight:600;margin-bottom:7px}.field input{width:100%;padding:13px 14px;border:1px solid #d1d5db;border-radius:12px;font-size:16px}button{width:100%;margin-top:18px;border:0;border-radius:13px;padding:15px;background:#111827;color:#fff;font-size:16px;font-weight:700}button:disabled{opacity:.4}.preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.thumb{aspect-ratio:1;border-radius:10px;object-fit:cover;width:100%;background:#e5e7eb}.status{margin-top:14px;text-align:center;font-size:14px;line-height:1.45;min-height:20px}.privacy{text-align:center;color:#6b7280;font-size:12px;margin:16px 8px}.success{font-weight:700}.error{color:#b91c1c}
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+/* ===============================
+   GERAL
+================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+
+:root {
+
+  --pink: #e75c7b;
+  --pink-dark: #d94769;
+  --pink-light: #fff0f4;
+
+  --rose: #f8c7d2;
+
+  --white: #ffffff;
+
+  --text: #3f3f46;
+
+  --soft-shadow:
+    0 10px 35px rgba(191, 107, 130, 0.18);
+
+}
+
+
+body {
+
+  margin: 0;
+
+  min-height: 100vh;
+
+  font-family: "Poppins", sans-serif;
+
+  color: var(--text);
+
+  background:
+    radial-gradient(
+      circle at top,
+      #fff 0%,
+      #fff6f8 45%,
+      #fdecef 100%
+    );
+
+}
+
+
+button,
+input {
+
+  font-family: inherit;
+
+}
+
+
+button {
+
+  cursor: pointer;
+
+}
+
+
+.hidden {
+
+  display: none !important;
+
+}
+
+
+/* ===============================
+   FLORES
+================================ */
+
+.flowers {
+
+  position: fixed;
+
+  z-index: 0;
+
+  font-size: 34px;
+
+  opacity: .65;
+
+  pointer-events: none;
+
+}
+
+
+.flowers-top-left {
+
+  top: 10px;
+  left: 10px;
+
+}
+
+
+.flowers-top-right {
+
+  top: 10px;
+  right: 10px;
+
+}
+
+
+/* ===============================
+   LOGIN
+================================ */
+
+.login-screen {
+
+  position: relative;
+
+  z-index: 1;
+
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+}
+
+
+.login-card {
+
+  width: 100%;
+
+  max-width: 520px;
+
+  min-height: 680px;
+
+  padding: 40px 28px 30px;
+
+  text-align: center;
+
+  border-radius: 32px;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.96),
+      rgba(255,244,247,.96)
+    );
+
+  box-shadow: var(--soft-shadow);
+
+  border: 1px solid rgba(231,92,123,.15);
+
+}
+
+
+.heart {
+
+  color: var(--pink);
+
+  font-size: 34px;
+
+}
+
+
+.login-card h1 {
+
+  margin: 10px 0 5px;
+
+  font-family: "Great Vibes", cursive;
+
+  font-weight: normal;
+
+  font-size: clamp(44px, 9vw, 70px);
+
+  line-height: .95;
+
+  color: var(--pink-dark);
+
+}
+
+
+.login-card h1 span {
+
+  display: block;
+
+}
+
+
+.title-line {
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 20px 0 32px;
+
+  color: var(--pink);
+
+}
+
+
+.title-line span {
+
+  display: block;
+
+  width: 60px;
+
+  height: 1px;
+
+  background: var(--pink);
+
+}
+
+
+.code-label {
+
+  margin-bottom: 10px;
+
+  font-size: 15px;
+
+}
+
+
+#eventCode {
+
+  width: 100%;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  border: 2px solid #f3b7c5;
+
+  background: white;
+
+  text-align: center;
+
+  letter-spacing: 5px;
+
+  font-weight: 600;
+
+  font-size: 18px;
+
+  outline: none;
+
+  text-transform: uppercase;
+
+}
+
+
+#eventCode:focus {
+
+  border-color: var(--pink);
+
+  box-shadow:
+    0 0 0 4px rgba(231,92,123,.12);
+
+}
+
+
+.primary-button {
+
+  width: 100%;
+
+  border: none;
+
+  border-radius: 16px;
+
+  margin-top: 16px;
+
+  padding: 17px 22px;
+
+  background:
+
+    linear-gradient(
+      135deg,
+      var(--pink),
+      #ef7893
+    );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  box-shadow:
+
+    0 8px 18px rgba(231,92,123,.25);
+
+  transition:
+    transform .2s,
+    box-shadow .2s;
+
+}
+
+
+.primary-button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 24px rgba(231,92,123,.35);
+
+}
+
+
+.primary-button span {
+
+  float: right;
+
+  font-size: 23px;
+
+  line-height: 15px;
+
+}
+
+
+.error-message {
+
+  color: #c22d4b;
+
+  font-size: 14px;
+
+  margin-top: 12px;
+
+}
+
+
+/* ===============================
+   CASAL DE PATOS + SHIH TZU
+================================ */
+
+.wedding-family {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 30px;
+
+  min-height: 180px;
+
+}
+
+
+.duck {
+
+  position: relative;
+
+  width: 115px;
+
+  text-align: center;
+
+}
+
+
+.duck-face {
+
+  font-size: 88px;
+
+  line-height: 1;
+
+}
+
+
+.groom {
+
+  transform: scale(1.05);
+
+}
+
+
+.groom .hat {
+
+  position: absolute;
+
+  top: -24px;
+
+  left: 32px;
+
+  font-size: 35px;
+
+  z-index: 2;
+
+}
+
+
+.tuxedo {
+
+  font-size: 30px;
+
+  margin-top: -15px;
+
+}
+
+
+.dog {
+
+  position: relative;
+
+  z-index: 3;
+
+  font-size: 72px;
+
+  margin-bottom: -2px;
+
+}
+
+
+.bride {
+
+  /* Mais elegante/magra */
+  transform: scaleX(.82);
+
+}
+
+
+.bride .pink-hair {
+
+  position: absolute;
+
+  z-index: 4;
+
+  top: -18px;
+
+  left: 8px;
+
+  color: #f3a4b8;
+
+  font-size: 30px;
+
+  letter-spacing: -8px;
+
+}
+
+
+.bride .veil {
+
+  position: absolute;
+
+  top: 18px;
+
+  right: -18px;
+
+  color: #ffffff;
+
+  font-size: 50px;
+
+  opacity: .85;
+
+}
+
+
+.bride .bouquet {
+
+  margin-top: -18px;
+
+  font-size: 38px;
+
+}
+
+
+.welcome-text {
+
+  margin: 20px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+
+}
+
+
+/* ===============================
+   APP
+================================ */
+
+.app {
+
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  max-width: 1000px;
+
+  margin: auto;
+
+  min-height: 100vh;
+
+  padding-bottom: 30px;
+
+}
+
+
+/* ===============================
+   CABEÇALHO
+================================ */
+
+.header {
+
+  min-height: 120px;
+
+  display: grid;
+
+  grid-template-columns: 70px 1fr 130px;
+
+  align-items: center;
+
+  padding: 15px 20px;
+
+  background:
+
+    rgba(255,255,255,.88);
+
+  backdrop-filter: blur(10px);
+
+  border-bottom:
+
+    1px solid rgba(231,92,123,.12);
+
+}
+
+
+.menu-button {
+
+  width: 45px;
+
+  height: 45px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--pink);
+
+  font-size: 28px;
+
+}
+
+
+.header-title {
+
+  text-align: center;
+
+  font-family: "Great Vibes", cursive;
+
+  color: var(--pink-dark);
+
+  font-size: 24px;
+
+  line-height: 1;
+
+}
+
+
+.header-title strong {
+
+  display: block;
+
+  font-size: 40px;
+
+  font-weight: normal;
+
+}
+
+
+.mini-heart {
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 12px;
+
+  margin-top: 5px;
+
+  color: var(--pink);
+
+}
+
+
+.header-family {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  font-size: 26px;
+
+}
+
+
+.mini-dog {
+
+  font-size: 24px;
+
+  margin: 0 -6px;
+
+  position: relative;
+
+  z-index: 2;
+
+}
+
+
+/* ===============================
+   MENU
+================================ */
+
+.side-menu {
+
+  position: fixed;
+
+  z-index: 50;
+
+  top: 0;
+
+  left: 0;
+
+  width: 280px;
+
+  height: 100vh;
+
+  padding: 30px;
+
+  background: white;
+
+  transform: translateX(-100%);
+
+  transition: transform .3s;
+
+  box-shadow: var(--soft-shadow);
+
+}
+
+
+.side-menu.open {
+
+  transform: translateX(0);
+
+}
+
+
+.side-menu h2 {
+
+  color: var(--pink-dark);
+
+}
+
+
+.side-menu button {
+
+  display: block;
+
+  width: 100%;
+
+  padding: 15px;
+
+  margin-top: 10px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: var(--pink-light);
+
+  text-align: left;
+
+}
+
+
+.close-menu {
+
+  font-size: 30px;
+
+}
+
+
+.menu-overlay {
+
+  position: fixed;
+
+  z-index: 40;
+
+  inset: 0;
+
+  background: rgba(0,0,0,.35);
+
+  display: none;
+
+}
+
+
+.menu-overlay.open {
+
+  display: block;
+
+}
+
+
+/* ===============================
+   TABS
+================================ */
+
+.tabs {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  padding: 12px 20px 0;
+
+  background: white;
+
+}
+
+
+.tab {
+
+  flex: 1;
+
+  max-width: 300px;
+
+  padding: 16px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #777;
+
+  font-weight: 600;
+
+  border-bottom: 3px solid transparent;
+
+}
+
+
+.tab.active {
+
+  color: var(--pink-dark);
+
+  border-bottom-color: var(--pink);
+
+}
+
+
+/* ===============================
+   CONTEÚDO
+================================ */
+
+.content-section {
+
+  padding: 25px 18px;
+
+}
+
+
+.content-card {
+
+  max-width: 650px;
+
+  margin: auto;
+
+  padding: 35px 25px;
+
+  border-radius: 28px;
+
+  background: rgba(255,255,255,.94);
+
+  box-shadow: var(--soft-shadow);
+
+}
+
+
+.camera-icon {
+
+  width: 75px;
+
+  height: 75px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin: auto;
+
+  border-radius: 50%;
+
+  background: var(--pink-light);
+
+  font-size: 36px;
+
+}
+
+
+.content-card h2 {
+
+  text-align: center;
+
+  margin: 18px 0 4px;
+
+  font-size: 28px;
+
+}
+
+
+.small-heart-line {
+
+  text-align: center;
+
+  color: var(--pink);
+
+}
+
+
+.subtitle {
+
+  max-width: 430px;
+
+  margin: 15px auto 28px;
+
+  text-align: center;
+
+  color: #666;
+
+}
+
+
+.content-card label {
+
+  display: block;
+
+  margin: 18px 0 8px;
+
+  font-weight: 500;
+
+}
+
+
+.content-card label span {
+
+  color: #999;
+
+  font-weight: normal;
+
+}
+
+
+.content-card input[type="text"] {
+
+  width: 100%;
+
+  padding: 16px;
+
+  border-radius: 14px;
+
+  border: 1px solid #ddd;
+
+  outline: none;
+
+}
+
+
+.file-picker {
+
+  display: flex !important;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  border: 2px dashed #f0a7b8;
+
+  background: #fff8fa;
+
+  cursor: pointer;
+
+}
+
+
+.plus {
+
+  width: 48px;
+
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: var(--pink);
+
+  font-size: 35px;
+
+}
+
+
+.file-picker strong {
+
+  display: block;
+
+}
+
+
+.file-picker small {
+
+  color: #888;
+
+}
+
+
+.selected-info {
+
+  margin-top: 15px;
+
+  color: var(--pink-dark);
+
+  font-weight: 600;
+
+}
+
+
+.preview-grid {
+
+  display: grid;
+
+  grid-template-columns:
+
+    repeat(auto-fill, minmax(75px, 1fr));
+
+  gap: 8px;
+
+  margin-top: 15px;
+
+}
+
+
+.preview-grid img {
+
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+}
+
+
+.upload-button {
+
+  margin-top: 25px;
+
+}
+
+
+.upload-status {
+
+  text-align: center;
+
+  margin-top: 15px;
+
+  font-size: 14px;
+
+}
+
+
+.security-text {
+
+  text-align: center;
+
+  color: #888;
+
+  font-size: 12px;
+
+  margin-top: 20px;
+
+}
+
+
+/* ===============================
+   GALERIA
+================================ */
+
+.gallery-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+
+}
+
+
+.gallery-header h2 {
+
+  margin: 0;
+
+}
+
+
+#photoCount {
+
+  display: inline-block;
+
+  padding: 3px 10px;
+
+  border-radius: 20px;
+
+  background: var(--pink);
+
+  color: white;
+
+  font-size: 13px;
+
+}
+
+
+.refresh-button {
+
+  padding: 10px 15px;
+
+  border-radius: 12px;
+
+  border: none;
+
+  background: white;
+
+  box-shadow: 0 5px 15px rgba(0,0,0,.08);
+
+}
+
+
+.gallery-message {
+
+  text-align: center;
+
+  padding: 30px;
+
+  color: #777;
+
+}
+
+
+.gallery-grid {
+
+  display: grid;
+
+  grid-template-columns:
+
+    repeat(auto-fill, minmax(110px, 1fr));
+
+  gap: 10px;
+
+}
+
+
+.gallery-item {
+
+  position: relative;
+
+  aspect-ratio: 1;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  background: #eee;
+
+  cursor: pointer;
+
+}
+
+
+.gallery-item img {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform .25s;
+
+}
+
+
+.gallery-item:hover img {
+
+  transform: scale(1.07);
+
+}
+
+
+.thank-you {
+
+  margin: 25px auto 0;
+
+  padding: 16px;
+
+  max-width: 500px;
+
+  border-radius: 20px;
+
+  background: white;
+
+  text-align: center;
+
+  box-shadow: var(--soft-shadow);
+
+}
+
+
+.thank-you span {
+
+  color: var(--pink);
+
+}
+
+
+/* ===============================
+   LIGHTBOX
+================================ */
+
+.lightbox {
+
+  position: fixed;
+
+  z-index: 100;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: rgba(15,10,12,.94);
+
+}
+
+
+.lightbox img {
+
+  max-width: 90%;
+
+  max-height: 85vh;
+
+  border-radius: 12px;
+
+  object-fit: contain;
+
+}
+
+
+.lightbox-close {
+
+  position: absolute;
+
+  top: 20px;
+
+  left: 20px;
+
+  border: none;
+
+  background: transparent;
+
+  color: white;
+
+  font-size: 45px;
+
+}
+
+
+.lightbox-counter {
+
+  position: absolute;
+
+  top: 25px;
+
+  color: white;
+
+}
+
+
+.lightbox-nav {
+
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 55px;
+
+  height: 55px;
+
+  border-radius: 50%;
+
+  border: none;
+
+  background: rgba(255,255,255,.18);
+
+  color: white;
+
+  font-size: 45px;
+
+}
+
+
+.previous {
+
+  left: 15px;
+
+}
+
+
+.next {
+
+  right: 15px;
+
+}
+
+
+/* ===============================
+   TELEMÓVEL
+================================ */
+
+@media (max-width: 600px) {
+
+  .header {
+
+    grid-template-columns: 45px 1fr 95px;
+
+  }
+
+  .header-title {
+
+    font-size: 19px;
+
+  }
+
+  .header-title strong {
+
+    font-size: 30px;
+
+  }
+
+  .header-family {
+
+    font-size: 18px;
+
+  }
+
+  .content-card {
+
+    padding: 28px 18px;
+
+  }
+
+  .gallery-grid {
+
+    grid-template-columns:
+      repeat(3, 1fr);
+
+  }
+
+}
