@@ -1332,6 +1332,8 @@ button {
 
 .gallery-folder-section {
   width: 100%;
+  grid-column: 1 / -1;
+  display: block;
   margin-bottom: 30px;
 }
 
@@ -1349,6 +1351,7 @@ button {
 
 /* Grelha das fotos */
 .gallery-folder-grid {
+  width: 100%;
   display: grid;
   grid-template-columns:
     repeat(auto-fill, minmax(120px, 1fr));
