@@ -134,6 +134,24 @@ const menuOverlay =
 const changeCodeButton =
   document.getElementById("changeCodeButton");
 
+// ==========================================
+// 📤 ELEMENTOS DE PROGRESSO
+// ==========================================
+
+const uploadProgress =
+  document.getElementById("uploadProgress");
+
+const uploadProgressText =
+  document.getElementById("uploadProgressText");
+
+const uploadProgressBar =
+  document.getElementById("uploadProgressBar");
+
+const uploadProgressPercent =
+  document.getElementById("uploadProgressPercent");
+
+const uploadProgressList =
+  document.getElementById("uploadProgressList");
 
 // ==========================================
 // ESTADO
@@ -313,50 +331,72 @@ photoInput.addEventListener(
 
 
 // ==========================================
-// REDIMENSIONAR FOTO
+// 📸 OTIMIZAR FOTO — MÁXIMA QUALIDADE
 // ==========================================
 
 async function compressImage(file) {
+
+  // Até 8 MB → enviar original
+  const MAX_ORIGINAL_BYTES =
+    8 * 1024 * 1024;
+
+
+  if (file.size <= MAX_ORIGINAL_BYTES) {
+
+    return file;
+
+  }
+
+
+  // ==========================================
+  // FOTO GRANDE → OTIMIZAR
+  // ==========================================
 
   const image =
     await createImageBitmap(file);
 
 
-  const maxSize = 2200;
+  // Máximo de 4000 px
+  const maxSize = 4000;
 
 
   let width = image.width;
-
   let height = image.height;
 
 
   if (width > height && width > maxSize) {
 
     height =
-      Math.round(
-        height * maxSize / width
-      );
+      Math.round(height * maxSize / width);
+
     width = maxSize;
+
   }
+
 
   if (height > width && height > maxSize) {
 
     width =
-      Math.round(
-        width * maxSize / height
-      );
+      Math.round(width * maxSize / height);
+
     height = maxSize;
+
   }
+
 
   const canvas =
     document.createElement("canvas");
 
   canvas.width = width;
-
   canvas.height = height;
 
+
   const context =
-    canvas.getContext("2d");
+    canvas.getContext(
+      "2d",
+      { alpha: false }
+    );
+
 
   context.drawImage(
     image,
@@ -366,19 +406,24 @@ async function compressImage(file) {
     height
   );
 
-  const blob =
-    await new Promise(
-      resolve => {
 
-        canvas.toBlob(
-          resolve,
-          "image/jpeg",
-          0.88
-        );
-      }
-    );
+  const blob =
+    await new Promise(resolve => {
+
+      canvas.toBlob(
+        resolve,
+        "image/jpeg",
+        0.95
+      );
+
+    });
+
+
+  image.close();
+
 
   return blob;
+
 }
 
 
@@ -537,6 +582,163 @@ function getFriendlyUploadError(error) {
   return (
     "Ocorreu um problema durante o envio."
   );
+}
+
+// ==========================================
+// 📊 INICIAR PROGRESSO
+// ==========================================
+
+function startUploadProgress(files) {
+
+  uploadProgress.classList.remove("hidden");
+
+  uploadProgressText.textContent =
+    `A preparar ${files.length} fotografia(s)...`;
+
+  uploadProgressBar.style.width = "0%";
+
+  uploadProgressPercent.textContent = "0%";
+
+  uploadProgressList.innerHTML = "";
+
+
+  files.forEach((file, index) => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "upload-progress-item waiting";
+
+    item.id =
+      `upload-item-${index}`;
+
+
+    const icon =
+      document.createElement("span");
+
+    icon.className =
+      "upload-progress-icon";
+
+    icon.textContent = "⬜";
+
+
+    const name =
+      document.createElement("span");
+
+    name.className =
+      "upload-progress-name";
+
+    name.textContent =
+      file.name;
+
+
+    const status =
+      document.createElement("span");
+
+    status.className =
+      "upload-progress-status";
+
+    status.textContent =
+      "A aguardar";
+
+
+    item.appendChild(icon);
+    item.appendChild(name);
+    item.appendChild(status);
+
+    uploadProgressList.appendChild(item);
+
+  });
+
+}
+
+
+// ==========================================
+// 📊 ATUALIZAR UMA FOTO
+// ==========================================
+
+function updateUploadItem(
+  index,
+  state,
+  message
+) {
+
+  const item =
+    document.getElementById(
+      `upload-item-${index}`
+    );
+
+
+  if (!item) return;
+
+
+  item.className =
+    `upload-progress-item ${state}`;
+
+
+  const icon =
+    item.querySelector(
+      ".upload-progress-icon"
+    );
+
+
+  const status =
+    item.querySelector(
+      ".upload-progress-status"
+    );
+
+
+  const icons = {
+
+    waiting: "⬜",
+    preparing: "⚙️",
+    uploading: "📤",
+    checking: "🔎",
+    success: "✅",
+    error: "❌"
+
+  };
+
+
+  icon.textContent =
+    icons[state] || "⬜";
+
+
+  status.textContent =
+    message;
+
+}
+
+
+// ==========================================
+// 📊 ATUALIZAR BARRA
+// ==========================================
+
+function updateUploadProgress(
+  completed,
+  total
+) {
+
+  const percent =
+    total
+      ? Math.round(
+          (completed / total) * 100
+        )
+      : 0;
+
+
+  uploadProgressBar.style.width =
+    `${percent}%`;
+
+
+  uploadProgressPercent.textContent =
+    `${percent}%`;
+
+
+  uploadProgressText.textContent =
+    `${completed} de ${total} fotografia(s) processada(s)`;
+
 }
 
 // ==========================================
