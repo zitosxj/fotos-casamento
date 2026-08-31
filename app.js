@@ -876,11 +876,30 @@ if (showAllPhotos) {
   );
 }
 
+
+function escapeHtml_(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
 // ==========================================
 // MOSTRAR GALERIA
 // ==========================================
 
 function renderGallery() {
+
+  galleryGrid.innerHTML = "";
+
+
+  // ==========================================
+  // NENHUMA FOTO
+  // ==========================================
 
   if (!filteredGalleryPhotos.length) {
 
@@ -895,54 +914,156 @@ function renderGallery() {
   }
 
 
-  galleryGrid.innerHTML = "";
+  // ==========================================
+  // AGRUPAR FOTOS POR PASTA
+  // ==========================================
+
+  const folders = {};
 
 
-  filteredGalleryPhotos.forEach(
-    (photo, index) => {
+  filteredGalleryPhotos.forEach(photo => {
 
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "gallery-item";
+    const folderName =
+      photo.folder || "Sem pasta";
 
 
-      const image =
-        document.createElement("img");
+    if (!folders[folderName]) {
 
-
-      image.src =
-        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-
-
-      image.dataset.src =
-        photo.thumbnail;
-
-
-      image.alt =
-        photo.name;
-
-
-      image.loading = "lazy";
-
-      image.decoding = "async";
-
-
-      item.appendChild(image);
-
-
-      item.addEventListener(
-        "click",
-        () => openLightbox(index)
-      );
-
-
-      galleryGrid.appendChild(item);
+      folders[folderName] = [];
 
     }
-  );
 
+
+    folders[folderName].push(photo);
+
+  });
+
+
+  // ==========================================
+  // CRIAR GRUPOS
+  // ==========================================
+
+  Object.keys(folders)
+
+    .sort((a, b) =>
+      a.localeCompare(b, "pt")
+    )
+
+    .forEach(folderName => {
+
+
+      // ======================================
+      // DIVISOR / NOME DA PASTA
+      // ======================================
+
+      const divider =
+        document.createElement("div");
+
+
+      divider.className =
+        "gallery-folder-divider";
+
+
+      divider.innerHTML = `
+
+        <span class="folder-icon">📁</span>
+
+        <span class="folder-name">
+          ${escapeHtml_(folderName)}
+        </span>
+
+        <span class="folder-count">
+          ${folders[folderName].length}
+        </span>
+
+      `;
+
+
+      galleryGrid.appendChild(divider);
+
+
+      // ======================================
+      // CONTENTOR DAS FOTOS DA PASTA
+      // ======================================
+
+      const folderGrid =
+        document.createElement("div");
+
+
+      folderGrid.className =
+        "gallery-folder-grid";
+
+
+      folders[folderName].forEach(photo => {
+
+
+        // ⚠️ Encontrar o índice real dentro
+        // da galeria filtrada para o lightbox
+
+        const realIndex =
+          filteredGalleryPhotos.findIndex(
+            p => p.id === photo.id
+          );
+
+
+        const item =
+          document.createElement("div");
+
+
+        item.className =
+          "gallery-item";
+
+
+        const image =
+          document.createElement("img");
+
+
+        // Placeholder inicial
+
+        image.src =
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+
+        // Imagem verdadeira
+
+        image.dataset.src =
+          photo.thumbnail;
+
+
+        image.alt =
+          photo.name;
+
+
+        image.loading = "lazy";
+
+        image.decoding = "async";
+
+
+        item.appendChild(image);
+
+
+        // Abrir lightbox
+
+        item.addEventListener(
+          "click",
+          () => openLightbox(realIndex)
+        );
+
+
+        folderGrid.appendChild(item);
+
+      });
+
+
+      galleryGrid.appendChild(folderGrid);
+
+
+    });
+
+
+  // ==========================================
+  // INICIAR LAZY LOADING
+  // ==========================================
 
   lazyLoadGalleryImages();
 
