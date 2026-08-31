@@ -153,20 +153,17 @@ function enterApp() {
     return;
 
   }
+  
+const accessUntil = Date.now() + (24 * 60 * 60 * 1000);
 
-
-  sessionStorage.setItem(
-    "weddingAccess",
-    "true"
-  );
-
+localStorage.setItem(
+  "weddingAccessUntil",
+  accessUntil.toString()
+);
 
   loginScreen.classList.add("hidden");
-
   appScreen.classList.remove("hidden");
-
   openUpload();
-
 }
 
 
@@ -194,14 +191,16 @@ enterButton.addEventListener(
 // MANTER SESSÃO
 // ==========================================
 
-if (
-  sessionStorage.getItem("weddingAccess") === "true"
-) {
+const accessUntil = Number(
+  localStorage.getItem("weddingAccessUntil")
+);
 
+if (accessUntil && Date.now() < accessUntil) {
   loginScreen.classList.add("hidden");
-
   appScreen.classList.remove("hidden");
 
+} else {
+  localStorage.removeItem("weddingAccessUntil");
 }
 
 
@@ -902,7 +901,7 @@ changeCodeButton.addEventListener(
   () => {
 
     sessionStorage.removeItem(
-      "weddingAccess"
+      "weddingAccessUntil"
     );
 
 
