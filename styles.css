@@ -1157,6 +1157,16 @@ button {
    .show-all-button {
      width: 100%;
    }
+   
+  .gallery-folder-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .folder-name {
+    font-size: 16px;
+  }
 }
 
 /* ==========================================
@@ -1234,4 +1244,78 @@ button {
 
 .show-all-button:hover {
   background: rgba(240, 140, 165, .25);
+}
+
+/* ==========================================
+   📁 GALERIA AGRUPADA POR PASTAS
+========================================== */
+
+/* DIVISOR DA PASTA */
+
+.gallery-folder-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom:
+    2px solid
+    rgba(231, 92, 123, .18);
+  color: var(--pink-dark);
+}
+
+/* PRIMEIRA PASTA */
+
+.gallery-folder-divider:first-child {
+  margin-top: 5px;
+}
+
+/* ÍCONE */
+
+.folder-icon {
+  font-size: 20px;
+}
+
+/* NOME DA PASTA */
+
+.folder-name {
+  font-size: 17px;
+  font-weight: 700;
+  flex: 1;
+}
+
+
+/* NÚMERO DE FOTOS */
+
+.folder-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background:
+    rgba(231, 92, 123, .12);
+  color: var(--pink-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   GRELHA DE CADA PASTA
+========================================== */
+
+.gallery-folder-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(120px, 1fr)
+    );
+  gap: 10px;
+  grid-column: 1 / -1;
 }
