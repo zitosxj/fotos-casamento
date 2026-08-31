@@ -1,11 +1,13 @@
-const CACHE = "event-photos-v3";
+const CACHE = "event-photos-v4";
 
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
-  "./manifest.webmanifest"
+  "./manifest.webmanifest",
+  "./images/wedding-family.png",
+  "./images/wedding-family-header.png"
 ];
 
 
