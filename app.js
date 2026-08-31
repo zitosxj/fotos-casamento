@@ -558,7 +558,7 @@ uploadButton.addEventListener(
 // ==========================================
 
 function loadGallery() {
-
+  refreshGallery.disabled = true;
   galleryLoading.classList.remove("hidden");
 
   galleryError.textContent = "";
@@ -585,7 +585,8 @@ function loadGallery() {
 
 
       galleryLoading.classList.add("hidden");
-
+      refreshGallery.disabled = false;
+      refreshGallery.textContent = "🔄 Atualizar";
 
       if (!response.ok) {
 
@@ -626,6 +627,8 @@ function loadGallery() {
     function () {
 
       galleryLoading.classList.add("hidden");
+      refreshGallery.disabled = false;
+      refreshGallery.textContent = "🔄 Atualizar";
 
       galleryError.textContent =
         "Não foi possível ligar à galeria.";
