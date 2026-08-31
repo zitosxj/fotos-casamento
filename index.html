@@ -291,7 +291,40 @@
 
       <div id="galleryError" class="gallery-message error-message"></div>
 
+<div class="gallery-filter">
 
+  <div class="filter-input-wrapper">
+
+    <span class="filter-icon">🔎</span>
+
+    <input
+      type="text"
+      id="folderFilter"
+      placeholder="Procurar por pasta ou convidado..."
+      autocomplete="off"
+    >
+
+    <button
+      type="button"
+      id="clearFolderFilter"
+      class="clear-filter-button hidden"
+      aria-label="Limpar filtro"
+      title="Mostrar todas as fotografias"
+    >
+      ✕
+    </button>
+
+  </div>
+
+  <button
+    type="button"
+    id="showAllPhotos"
+    class="show-all-button"
+  >
+    ✨ Ver todas
+  </button>
+
+</div>
       <div
         id="galleryGrid"
         class="gallery-grid"
