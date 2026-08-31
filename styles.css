@@ -337,153 +337,38 @@ button {
 
 }
 
-
 /* ===============================
    CASAL DE PATOS + SHIH TZU
 ================================ */
 
 .wedding-family {
-
+  width: 100%;
   display: flex;
-
-  align-items: flex-end;
-
   justify-content: center;
-
-  gap: 5px;
-
-  margin-top: 30px;
-
-  min-height: 180px;
-
+  align-items: flex-end;
+  margin: 22px auto 0;
+  overflow: hidden;
 }
 
-
-.duck {
-
-  position: relative;
-
-  width: 115px;
-
-  text-align: center;
-
-}
-
-
-.duck-face {
-
-  font-size: 88px;
-
-  line-height: 1;
-
-}
-
-
-.groom {
-
-  transform: scale(1.05);
-
-}
-
-
-.groom .hat {
-
-  position: absolute;
-
-  top: -24px;
-
-  left: 32px;
-
-  font-size: 35px;
-
-  z-index: 2;
-
-}
-
-
-.tuxedo {
-
-  font-size: 30px;
-
-  margin-top: -15px;
-
-}
-
-
-.dog {
-
-  position: relative;
-
-  z-index: 3;
-
-  font-size: 72px;
-
-  margin-bottom: -2px;
-
-}
-
-
-.bride {
-
-  /* Mais elegante/magra */
-  transform: scaleX(.82);
-
-}
-
-
-.bride .pink-hair {
-
-  position: absolute;
-
-  z-index: 4;
-
-  top: -18px;
-
-  left: 8px;
-
-  color: #f3a4b8;
-
-  font-size: 30px;
-
-  letter-spacing: -8px;
-
-}
-
-
-.bride .veil {
-
-  position: absolute;
-
-  top: 18px;
-
-  right: -18px;
-
-  color: #ffffff;
-
-  font-size: 50px;
-
-  opacity: .85;
-
-}
-
-
-.bride .bouquet {
-
-  margin-top: -18px;
-
-  font-size: 38px;
+.wedding-family img {
+  display: block;
+  width: min(100%, 390px);
+  max-height: 410px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 26px;
+  filter:
+    drop-shadow(
+      0 12px 18px rgba(120, 70, 80, .18)
+    );
 
 }
 
 
 .welcome-text {
-
   margin: 20px 0 0;
-
   color: #777;
-
   font-size: 13px;
-
 }
 
 
@@ -492,21 +377,13 @@ button {
 ================================ */
 
 .app {
-
   position: relative;
-
   z-index: 1;
-
   width: 100%;
-
   max-width: 1000px;
-
   margin: auto;
-
   min-height: 100vh;
-
   padding-bottom: 30px;
-
 }
 
 
@@ -515,204 +392,124 @@ button {
 ================================ */
 
 .header {
-
   min-height: 120px;
-
   display: grid;
-
   grid-template-columns: 70px 1fr 130px;
-
   align-items: center;
-
   padding: 15px 20px;
-
   background:
-
     rgba(255,255,255,.88);
-
   backdrop-filter: blur(10px);
-
   border-bottom:
-
     1px solid rgba(231,92,123,.12);
-
 }
 
-
 .menu-button {
-
   width: 45px;
-
   height: 45px;
-
   border: none;
-
   background: transparent;
-
   color: var(--pink);
-
   font-size: 28px;
-
 }
 
 
 .header-title {
-
   text-align: center;
-
   font-family: "Great Vibes", cursive;
-
   color: var(--pink-dark);
-
   font-size: 24px;
-
   line-height: 1;
-
 }
 
 
 .header-title strong {
-
   display: block;
-
   font-size: 40px;
-
   font-weight: normal;
-
 }
 
 
 .mini-heart {
-
   font-family: "Poppins", sans-serif;
-
   font-size: 12px;
-
   margin-top: 5px;
-
   color: var(--pink);
-
 }
 
 
 .header-family {
-
   display: flex;
-
   align-items: center;
-
   justify-content: flex-end;
-
   font-size: 26px;
-
 }
 
 
 .mini-dog {
-
   font-size: 24px;
-
   margin: 0 -6px;
-
   position: relative;
-
   z-index: 2;
-
 }
-
 
 /* ===============================
    MENU
 ================================ */
 
 .side-menu {
-
   position: fixed;
-
   z-index: 50;
-
   top: 0;
-
   left: 0;
-
   width: 280px;
-
   height: 100vh;
-
   padding: 30px;
-
   background: white;
-
   transform: translateX(-100%);
-
   transition: transform .3s;
-
   box-shadow: var(--soft-shadow);
-
 }
 
 
 .side-menu.open {
-
   transform: translateX(0);
-
 }
 
 
 .side-menu h2 {
-
   color: var(--pink-dark);
-
 }
 
 
 .side-menu button {
-
   display: block;
-
   width: 100%;
-
   padding: 15px;
-
   margin-top: 10px;
-
   border: none;
-
   border-radius: 12px;
-
   background: var(--pink-light);
-
   text-align: left;
-
 }
 
 
 .close-menu {
-
   font-size: 30px;
-
 }
 
 
 .menu-overlay {
-
   position: fixed;
-
   z-index: 40;
-
   inset: 0;
-
   background: rgba(0,0,0,.35);
-
   display: none;
-
 }
 
 
 .menu-overlay.open {
-
   display: block;
-
 }
 
 
@@ -721,38 +518,23 @@ button {
 ================================ */
 
 .tabs {
-
   display: flex;
-
   justify-content: center;
-
   gap: 15px;
-
   padding: 12px 20px 0;
-
   background: white;
-
 }
 
 
 .tab {
-
   flex: 1;
-
   max-width: 300px;
-
   padding: 16px;
-
   border: none;
-
   background: transparent;
-
   color: #777;
-
   font-weight: 600;
-
   border-bottom: 3px solid transparent;
-
 }
 
 
