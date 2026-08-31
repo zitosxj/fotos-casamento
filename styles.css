@@ -1397,3 +1397,183 @@ button {
     repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
+
+/* ==========================================
+   📤 PROGRESSO DO ENVIO
+========================================== */
+
+.upload-progress {
+
+  margin-top: 18px;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, .85);
+
+  border:
+    1px solid
+    rgba(231, 92, 123, .18);
+
+}
+
+
+.upload-progress-text {
+
+  text-align: center;
+
+  font-weight: 700;
+
+  margin-bottom: 10px;
+
+  color: var(--pink-dark);
+
+}
+
+
+.progress-track {
+
+  width: 100%;
+
+  height: 12px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background:
+    rgba(231, 92, 123, .12);
+
+}
+
+
+.progress-bar {
+
+  width: 0%;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f3a6b8,
+      #e75c7b
+    );
+
+  transition:
+    width .35s ease;
+
+}
+
+
+.upload-progress-percent {
+
+  text-align: center;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  margin-top: 7px;
+
+  color: var(--pink-dark);
+
+}
+
+
+/* LISTA */
+
+.upload-progress-list {
+
+  margin-top: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  max-height: 320px;
+
+  overflow-y: auto;
+
+}
+
+
+/* CADA FOTO */
+
+.upload-progress-item {
+
+  display: grid;
+
+  grid-template-columns:
+    28px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px 10px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  background:
+    rgba(255,255,255,.7);
+
+}
+
+
+.upload-progress-name {
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+
+.upload-progress-status {
+
+  font-size: 11px;
+
+  opacity: .72;
+
+}
+
+
+/* ESTADOS */
+
+.upload-progress-item.preparing,
+.upload-progress-item.uploading,
+.upload-progress-item.checking {
+
+  background:
+    rgba(243, 166, 184, .12);
+
+}
+
+
+.upload-progress-item.success {
+
+  background:
+    rgba(110, 190, 130, .10);
+
+}
+
+
+.upload-progress-item.error {
+
+  background:
+    rgba(220, 80, 80, .10);
+
+}
