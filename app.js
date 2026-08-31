@@ -1291,55 +1291,91 @@ function loadGallery() {
       }
 
 
-      const newPhotos =
-        response.photos || [];
+// ==========================================
+// 3️⃣ SINCRONIZAR COM O SERVIDOR
+// ==========================================
+
+// O servidor contém sempre a lista verdadeira
+// e atual das fotografias existentes.
+
+const serverPhotos =
+  response.photos || [];
 
 
-      // ==========================================
-      // 3️⃣ VERIFICAR SE EXISTEM FOTOS NOVAS
-      // ==========================================
+// IDs existentes no servidor
 
-      const currentIds =
-        new Set(
-          galleryPhotos.map(photo => photo.id)
-        );
+const serverIds =
+  new Set(
+    serverPhotos.map(photo => photo.id)
+  );
 
 
-      const photosToAdd =
-        newPhotos.filter(
-          photo => !currentIds.has(photo.id)
-        );
+// ==========================================
+// 🗑️ REMOVER FOTOS QUE JÁ NÃO EXISTEM
+// ==========================================
+
+const photosRemoved =
+  galleryPhotos.filter(
+    photo => !serverIds.has(photo.id)
+  );
 
 
-      // Se ainda não havia galeria
-      if (!galleryPhotos.length) {
+if (photosRemoved.length) {
 
-        galleryPhotos = newPhotos;
+  console.log(
+    `${photosRemoved.length} fotografia(s) removida(s) da cache.`
+  );
 
-        applyFolderFilter();
-
-      }
-
-
-      // Se existem fotos novas
-      else if (photosToAdd.length) {
-
-        // O servidor já envia as mais recentes primeiro
-        galleryPhotos =
-          [
-            ...photosToAdd,
-            ...galleryPhotos
-          ];
+}
 
 
-        applyFolderFilter();
+// ==========================================
+// ➕ DETETAR FOTOS NOVAS
+// ==========================================
 
-      }
+const currentIds =
+  new Set(
+    galleryPhotos.map(photo => photo.id)
+  );
 
 
-      // Atualizar contador
-      photoCount.textContent =
-        galleryPhotos.length;
+const photosAdded =
+  serverPhotos.filter(
+    photo => !currentIds.has(photo.id)
+  );
+
+
+if (photosAdded.length) {
+
+  console.log(
+    `${photosAdded.length} fotografia(s) nova(s) encontrada(s).`
+  );
+
+}
+
+
+// ==========================================
+// 🔄 USAR A LISTA ATUAL DO SERVIDOR
+// ==========================================
+
+// Isto resolve também fotografias que foram
+// movidas de uma pasta para outra.
+
+galleryPhotos =
+  serverPhotos;
+
+
+// ==========================================
+// 🖼️ ATUALIZAR GALERIA
+// ==========================================
+
+applyFolderFilter();
+
+
+// Atualizar contador geral
+
+photoCount.textContent =
+  filteredGalleryPhotos.length;
 
 
       // ==========================================
