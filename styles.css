@@ -1147,4 +1147,91 @@ button {
     width: 130px;
     height: 130px;
   }
+
+   .gallery-filter {
+     flex-direction: column;
+     align-items: stretch;
+   }
+   
+   
+   .show-all-button {
+     width: 100%;
+   }
+}
+
+/* ==========================================
+   FILTRO DA GALERIA
+========================================== */
+
+.gallery-filter {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 14px 0 18px;
+}
+
+.filter-input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+
+#folderFilter {
+  width: 100%;
+  box-sizing: border-box;
+  padding:
+    13px
+    42px
+    13px
+    42px;
+  border-radius: 25px;
+  border: 1px solid rgba(220, 120, 150, .28);
+  background: rgba(255,255,255,.92);
+  font-size: 14px;
+  outline: none;
+}
+
+#folderFilter:focus {
+  border-color: var(--pink);
+  box-shadow:
+    0 0 0 3px
+    rgba(240, 140, 165, .12);
+}
+
+.clear-filter-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(240, 140, 165, .15);
+  color: var(--pink-dark);
+  cursor: pointer;
+}
+
+.show-all-button {
+  white-space: nowrap;
+  border: none;
+  border-radius: 22px;
+  padding: 12px 15px;
+  background: rgba(240, 140, 165, .15);
+  color: var(--pink-dark);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.show-all-button:hover {
+  background: rgba(240, 140, 165, .25);
 }
