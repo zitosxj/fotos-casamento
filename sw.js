@@ -1,4 +1,4 @@
-const CACHE = "event-photos-v6";
+const CACHE = "event-photos-v7";
 
 const ASSETS = [
   "./",
@@ -11,9 +11,13 @@ const ASSETS = [
 ];
 
 
-// Instalar nova versão
+// ================================
+// INSTALAÇÃO
+// ================================
 
 self.addEventListener("install", event => {
+
+  self.skipWaiting();
 
   event.waitUntil(
 
@@ -22,12 +26,12 @@ self.addEventListener("install", event => {
 
   );
 
-  self.skipWaiting();
-
 });
 
 
-// Ativar nova versão e apagar caches antigas
+// ================================
+// ATIVAÇÃO
+// ================================
 
 self.addEventListener("activate", event => {
 
@@ -53,21 +57,38 @@ self.addEventListener("activate", event => {
 });
 
 
-// Pedidos
+// ================================
+// PEDIDOS
+// ================================
 
 self.addEventListener("fetch", event => {
 
   if (event.request.method !== "GET") return;
 
 
+  // Para ficheiros da aplicação:
+  // tenta sempre primeiro obter a versão nova
   event.respondWith(
 
-    caches.match(event.request)
-      .then(cached => {
+    fetch(event.request)
 
-        return cached || fetch(event.request);
+      .then(response => {
+
+        const copy = response.clone();
+
+        caches.open(CACHE)
+          .then(cache => {
+
+            cache.put(event.request, copy);
+
+          });
+
+        return response;
 
       })
+
+      // Se estiver offline, usa a cache
+      .catch(() => caches.match(event.request))
 
   );
 
