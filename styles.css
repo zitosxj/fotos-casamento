@@ -1167,6 +1167,12 @@ button {
   .folder-name {
     font-size: 16px;
   }
+
+  .gallery-folder-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+    gap: 8px;
+  }
 }
 
 /* ==========================================
@@ -1318,4 +1324,33 @@ button {
     );
   gap: 10px;
   grid-column: 1 / -1;
+}
+
+/* ==========================================
+   SECÇÃO DE CADA PASTA
+========================================== */
+
+.gallery-folder-section {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+/* Nome da pasta */
+.gallery-folder-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom:
+    2px solid
+    rgba(231, 92, 123, .18);
+}
+
+/* Grelha das fotos */
+.gallery-folder-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
 }
