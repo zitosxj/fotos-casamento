@@ -855,22 +855,26 @@ function clearFolderFilterFunction() {
 
 }
 
-folderFilter.addEventListener(
-  "input",
-  applyFolderFilter
-);
+if (folderFilter) {
+  folderFilter.addEventListener(
+    "input",
+    applyFolderFilter
+  );
+}
 
+if (clearFolderFilter) {
+  clearFolderFilter.addEventListener(
+    "click",
+    clearFolderFilterFunction
+  );
+}
 
-clearFolderFilter.addEventListener(
-  "click",
-  clearFolderFilterFunction
-);
-
-
-showAllPhotos.addEventListener(
-  "click",
-  clearFolderFilterFunction
-);
+if (showAllPhotos) {
+  showAllPhotos.addEventListener(
+    "click",
+    clearFolderFilterFunction
+  );
+}
 
 // ==========================================
 // MOSTRAR GALERIA
