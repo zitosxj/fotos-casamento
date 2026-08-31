@@ -928,9 +928,7 @@ function renderGallery() {
 
 
     if (!folders[folderName]) {
-
       folders[folderName] = [];
-
     }
 
 
@@ -940,7 +938,7 @@ function renderGallery() {
 
 
   // ==========================================
-  // CRIAR GRUPOS
+  // CRIAR CADA SECÇÃO
   // ==========================================
 
   Object.keys(folders)
@@ -953,7 +951,19 @@ function renderGallery() {
 
 
       // ======================================
-      // DIVISOR / NOME DA PASTA
+      // SECÇÃO COMPLETA DA PASTA
+      // ======================================
+
+      const section =
+        document.createElement("section");
+
+
+      section.className =
+        "gallery-folder-section";
+
+
+      // ======================================
+      // NOME DA PASTA
       // ======================================
 
       const divider =
@@ -964,26 +974,45 @@ function renderGallery() {
         "gallery-folder-divider";
 
 
-      divider.innerHTML = `
+      const icon =
+        document.createElement("span");
 
-        <span class="folder-icon">📁</span>
+      icon.className =
+        "folder-icon";
 
-        <span class="folder-name">
-          ${escapeHtml_(folderName)}
-        </span>
-
-        <span class="folder-count">
-          ${folders[folderName].length}
-        </span>
-
-      `;
+      icon.textContent = "📁";
 
 
-      galleryGrid.appendChild(divider);
+      const name =
+        document.createElement("span");
+
+      name.className =
+        "folder-name";
+
+      name.textContent =
+        folderName;
+
+
+      const count =
+        document.createElement("span");
+
+      count.className =
+        "folder-count";
+
+      count.textContent =
+        folders[folderName].length;
+
+
+      divider.appendChild(icon);
+      divider.appendChild(name);
+      divider.appendChild(count);
+
+
+      section.appendChild(divider);
 
 
       // ======================================
-      // CONTENTOR DAS FOTOS DA PASTA
+      // GRELHA DAS FOTOS
       // ======================================
 
       const folderGrid =
@@ -997,9 +1026,7 @@ function renderGallery() {
       folders[folderName].forEach(photo => {
 
 
-        // ⚠️ Encontrar o índice real dentro
-        // da galeria filtrada para o lightbox
-
+        // Índice correto para o lightbox
         const realIndex =
           filteredGalleryPhotos.findIndex(
             p => p.id === photo.id
@@ -1018,13 +1045,9 @@ function renderGallery() {
           document.createElement("img");
 
 
-        // Placeholder inicial
-
         image.src =
           "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
-
-        // Imagem verdadeira
 
         image.dataset.src =
           photo.thumbnail;
@@ -1035,14 +1058,11 @@ function renderGallery() {
 
 
         image.loading = "lazy";
-
         image.decoding = "async";
 
 
         item.appendChild(image);
 
-
-        // Abrir lightbox
 
         item.addEventListener(
           "click",
@@ -1055,19 +1075,27 @@ function renderGallery() {
       });
 
 
-      galleryGrid.appendChild(folderGrid);
+      // Colocar a grelha imediatamente
+      // abaixo do nome da pasta
 
+      section.appendChild(folderGrid);
+
+
+      // Colocar toda a secção na galeria
+
+      galleryGrid.appendChild(section);
 
     });
 
 
   // ==========================================
-  // INICIAR LAZY LOADING
+  // LAZY LOAD
   // ==========================================
 
   lazyLoadGalleryImages();
 
 }
+
 // ==========================================
 // LAZY LOAD DAS MINIATURAS
 // ==========================================
