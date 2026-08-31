@@ -129,11 +129,15 @@ const changeCodeButton =
 // ==========================================
 
 let selectedFiles = [];
-
 let galleryPhotos = [];
-
 let currentPhotoIndex = 0;
 
+// ==========================================
+// CACHE DA GALERIA
+// ==========================================
+
+const GALLERY_CACHE_KEY = "weddingGalleryCache";
+const GALLERY_CACHE_TIME = "weddingGalleryCacheTime";
 
 // ==========================================
 // LOGIN
@@ -557,13 +561,74 @@ uploadButton.addEventListener(
 // ==========================================
 
 function loadGallery() {
+
+  // ==========================================
+  // DESATIVAR BOTÃO
+  // ==========================================
+
   refreshGallery.disabled = true;
-  galleryLoading.classList.remove("hidden");
+
+  refreshGallery.textContent = "⏳ A carregar...";
+
+
+  // ==========================================
+  // 1️⃣ MOSTRAR CACHE IMEDIATAMENTE
+  // ==========================================
+
+  const cachedGallery =
+    localStorage.getItem(GALLERY_CACHE_KEY);
+
+
+  if (cachedGallery) {
+
+    try {
+
+      const cachedPhotos =
+        JSON.parse(cachedGallery);
+
+
+      if (
+        Array.isArray(cachedPhotos) &&
+        cachedPhotos.length
+      ) {
+
+        galleryPhotos = cachedPhotos;
+
+        photoCount.textContent =
+          galleryPhotos.length;
+
+
+        renderGallery();
+
+
+        // Não mostrar o ecrã de loading
+        galleryLoading.classList.add("hidden");
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Erro ao ler cache da galeria:",
+        error
+      );
+
+    }
+
+  } else {
+
+    // Apenas mostra loading se ainda não houver fotos
+    galleryLoading.classList.remove("hidden");
+
+  }
+
 
   galleryError.textContent = "";
 
-  galleryGrid.innerHTML = "";
 
+  // ==========================================
+  // 2️⃣ PEDIR ATUALIZAÇÃO AO SERVIDOR
+  // ==========================================
 
   const callbackName =
     "galleryCallback_" +
@@ -577,36 +642,109 @@ function loadGallery() {
   window[callbackName] =
     function (response) {
 
+      // Limpar script
       script.remove();
-
 
       delete window[callbackName];
 
 
       galleryLoading.classList.add("hidden");
+
+
+      // Reativar botão
       refreshGallery.disabled = false;
-      refreshGallery.textContent = "🔄 Atualizar";
+
+      refreshGallery.textContent =
+        "🔄 Atualizar";
+
 
       if (!response.ok) {
 
         galleryError.textContent =
           response.error ||
-          "Não foi possível carregar a galeria.";
+          "Não foi possível atualizar a galeria.";
 
         return;
 
       }
 
 
-      galleryPhotos =
+      const newPhotos =
         response.photos || [];
 
 
+      // ==========================================
+      // 3️⃣ VERIFICAR SE EXISTEM FOTOS NOVAS
+      // ==========================================
+
+      const currentIds =
+        new Set(
+          galleryPhotos.map(photo => photo.id)
+        );
+
+
+      const photosToAdd =
+        newPhotos.filter(
+          photo => !currentIds.has(photo.id)
+        );
+
+
+      // Se ainda não havia galeria
+      if (!galleryPhotos.length) {
+
+        galleryPhotos = newPhotos;
+
+        renderGallery();
+
+      }
+
+
+      // Se existem fotos novas
+      else if (photosToAdd.length) {
+
+        // O servidor já envia as mais recentes primeiro
+        galleryPhotos =
+          [
+            ...photosToAdd,
+            ...galleryPhotos
+          ];
+
+
+        renderGallery();
+
+      }
+
+
+      // Atualizar contador
       photoCount.textContent =
         galleryPhotos.length;
 
 
-      renderGallery();
+      // ==========================================
+      // 4️⃣ GUARDAR CACHE
+      // ==========================================
+
+      try {
+
+        localStorage.setItem(
+          GALLERY_CACHE_KEY,
+          JSON.stringify(galleryPhotos)
+        );
+
+
+        localStorage.setItem(
+          GALLERY_CACHE_TIME,
+          Date.now().toString()
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "Não foi possível guardar cache:",
+          error
+        );
+
+      }
 
     };
 
@@ -624,16 +762,21 @@ function loadGallery() {
 
   script.onerror =
     function () {
-
       galleryLoading.classList.add("hidden");
+
       refreshGallery.disabled = false;
-      refreshGallery.textContent = "🔄 Atualizar";
+      refreshGallery.textContent =
+        "🔄 Atualizar";
 
-      galleryError.textContent =
-        "Não foi possível ligar à galeria.";
+      // Só mostra erro se não tivermos cache
+      if (!galleryPhotos.length) {
 
+        galleryError.textContent =
+          "Não foi possível ligar à galeria.";
+      }
+
+      script.remove();
     };
-
 
   document.body.appendChild(script);
 
@@ -659,6 +802,10 @@ function renderGallery() {
   }
 
 
+  // Limpar apenas quando vamos renderizar
+  galleryGrid.innerHTML = "";
+
+
   galleryPhotos.forEach(
     (photo, index) => {
 
@@ -674,7 +821,13 @@ function renderGallery() {
         document.createElement("img");
 
 
+      // Placeholder transparente
       image.src =
+        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+
+      // Guardamos o URL verdadeiro
+      image.dataset.src =
         photo.thumbnail;
 
 
@@ -682,8 +835,12 @@ function renderGallery() {
         photo.name;
 
 
-      image.loading =
-        "lazy";
+      // Lazy loading nativo
+      image.loading = "lazy";
+
+
+      // Prioridade baixa
+      image.decoding = "async";
 
 
       item.appendChild(image);
@@ -700,9 +857,84 @@ function renderGallery() {
     }
   );
 
+
+  // Iniciar carregamento progressivo
+  lazyLoadGalleryImages();
+
 }
 
+// ==========================================
+// LAZY LOAD DAS MINIATURAS
+// ==========================================
 
+function lazyLoadGalleryImages() {
+
+  const images =
+    document.querySelectorAll(
+      ".gallery-item img[data-src]"
+    );
+
+
+  // Se o browser não suportar IntersectionObserver
+  if (!("IntersectionObserver" in window)) {
+
+    images.forEach(image => {
+
+      image.src =
+        image.dataset.src;
+
+      image.removeAttribute("data-src");
+
+    });
+
+    return;
+
+  }
+
+
+  const observer =
+    new IntersectionObserver(
+
+      (entries) => {
+
+        entries.forEach(entry => {
+
+          if (!entry.isIntersecting) return;
+
+
+          const image =
+            entry.target;
+
+
+          image.src =
+            image.dataset.src;
+
+
+          image.removeAttribute("data-src");
+
+
+          observer.unobserve(image);
+
+        });
+
+      },
+
+      {
+
+        // Começa a carregar um pouco antes
+        // de a imagem aparecer no ecrã
+        rootMargin: "300px"
+
+      }
+
+    );
+
+
+  images.forEach(image =>
+    observer.observe(image)
+  );
+
+}
 // ==========================================
 // LIGHTBOX
 // ==========================================
