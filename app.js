@@ -1068,15 +1068,13 @@ function nextPhotoFunction() {
 
   currentPhotoIndex++;
 
-
-if (
-  currentPhotoIndex >= filteredGalleryPhotos.length
-)
+  if (
+    currentPhotoIndex >= filteredGalleryPhotos.length
+  ) {
 
     currentPhotoIndex = 0;
 
   }
-
 
   showCurrentPhoto();
 
