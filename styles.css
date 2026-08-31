@@ -391,7 +391,7 @@ button {
    CABEÇALHO
 ================================ */
 
-.header {
+. {
   min-height: 120px;
   display: grid;
   grid-template-columns: 70px 1fr 130px;
@@ -414,7 +414,7 @@ button {
 }
 
 
-.header-title {
+.-title {
   text-align: center;
   font-family: "Great Vibes", cursive;
   color: var(--pink-dark);
@@ -423,7 +423,7 @@ button {
 }
 
 
-.header-title strong {
+.-title strong {
   display: block;
   font-size: 40px;
   font-weight: normal;
@@ -442,15 +442,16 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  font-size: 26px;
+  height: 85px;
+  overflow: hidden;
 }
 
 
-.mini-dog {
-  font-size: 24px;
-  margin: 0 -6px;
-  position: relative;
-  z-index: 2;
+.header-family img {
+  width: 150px;
+  max-height: 85px;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* ===============================
