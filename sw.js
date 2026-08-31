@@ -1,4 +1,4 @@
-const CACHE = "event-photos-v5";
+const CACHE = "event-photos-v6";
 
 const ASSETS = [
   "./",
