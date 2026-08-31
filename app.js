@@ -88,7 +88,18 @@ const refreshGallery =
 const refreshGalleryMenu =
   document.getElementById("refreshGalleryMenu");
 
+// ==========================================
+// FILTRO POR PASTA
+// ==========================================
+const folderFilter =
+  document.getElementById("folderFilter");
 
+const clearFolderFilter =
+  document.getElementById("clearFolderFilter");
+
+const showAllPhotos =
+  document.getElementById("showAllPhotos");
+// ==========================================
 const lightbox =
   document.getElementById("lightbox");
 
@@ -130,6 +141,7 @@ const changeCodeButton =
 
 let selectedFiles = [];
 let galleryPhotos = [];
+let filteredGalleryPhotos = [];
 let currentPhotoIndex = 0;
 
 // ==========================================
@@ -598,7 +610,7 @@ function loadGallery() {
           galleryPhotos.length;
 
 
-        renderGallery();
+        applyFolderFilter();
 
 
         // Não mostrar o ecrã de loading
@@ -694,7 +706,7 @@ function loadGallery() {
 
         galleryPhotos = newPhotos;
 
-        renderGallery();
+        applyFolderFilter();
 
       }
 
@@ -710,7 +722,7 @@ function loadGallery() {
           ];
 
 
-        renderGallery();
+        applyFolderFilter();
 
       }
 
@@ -782,6 +794,83 @@ function loadGallery() {
 
 }
 
+// ==========================================
+// FILTRO DA GALERIA POR PASTA
+// ==========================================
+
+function applyFolderFilter() {
+
+  const filter =
+    String(folderFilter.value || "")
+      .trim()
+      .toLowerCase();
+
+
+  // Sem filtro = todas as fotos
+  if (!filter) {
+
+    filteredGalleryPhotos =
+      [...galleryPhotos];
+
+  } else {
+
+    filteredGalleryPhotos =
+      galleryPhotos.filter(photo =>
+
+        String(photo.folder || "")
+          .toLowerCase()
+          .includes(filter)
+
+    );
+
+  }
+
+
+  // Atualizar contador
+  photoCount.textContent =
+    filteredGalleryPhotos.length;
+
+
+  // Mostrar/esconder botão X
+  clearFolderFilter.classList.toggle(
+    "hidden",
+    !filter
+  );
+
+
+  renderGallery();
+
+}
+
+
+// ==========================================
+// LIMPAR FILTRO
+// ==========================================
+
+function clearFolderFilterFunction() {
+
+  folderFilter.value = "";
+
+  applyFolderFilter();
+
+}
+
+folderFilter.addEventListener(
+  "input",
+  applyFolderFilter
+);
+
+
+clearFolderFilter.addEventListener(
+  "click",
+  clearFolderFilterFunction
+);
+
+
+showAllPhotos.addEventListener(
+  "click",
+  clearFolderFilterFunction
+);
 
 // ==========================================
 // MOSTRAR GALERIA
@@ -789,11 +878,11 @@ function loadGallery() {
 
 function renderGallery() {
 
-  if (!galleryPhotos.length) {
+  if (!filteredGalleryPhotos.length) {
 
     galleryGrid.innerHTML = `
       <div class="gallery-message">
-        Ainda não existem fotografias na galeria 📸
+        Nenhuma fotografia encontrada 📸
       </div>
     `;
 
@@ -802,16 +891,14 @@ function renderGallery() {
   }
 
 
-  // Limpar apenas quando vamos renderizar
   galleryGrid.innerHTML = "";
 
 
-  galleryPhotos.forEach(
+  filteredGalleryPhotos.forEach(
     (photo, index) => {
 
       const item =
         document.createElement("div");
-
 
       item.className =
         "gallery-item";
@@ -821,12 +908,10 @@ function renderGallery() {
         document.createElement("img");
 
 
-      // Placeholder transparente
       image.src =
         "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
 
-      // Guardamos o URL verdadeiro
       image.dataset.src =
         photo.thumbnail;
 
@@ -835,11 +920,8 @@ function renderGallery() {
         photo.name;
 
 
-      // Lazy loading nativo
       image.loading = "lazy";
 
-
-      // Prioridade baixa
       image.decoding = "async";
 
 
@@ -858,11 +940,9 @@ function renderGallery() {
   );
 
 
-  // Iniciar carregamento progressivo
   lazyLoadGalleryImages();
 
 }
-
 // ==========================================
 // LAZY LOAD DAS MINIATURAS
 // ==========================================
@@ -954,8 +1034,8 @@ function openLightbox(index) {
 
 function showCurrentPhoto() {
 
-  const photo =
-    galleryPhotos[currentPhotoIndex];
+const photo =
+  filteredGalleryPhotos[currentPhotoIndex];
 
 
   if (!photo) return;
@@ -966,7 +1046,7 @@ function showCurrentPhoto() {
 
 
   lightboxCounter.textContent =
-    `${currentPhotoIndex + 1} / ${galleryPhotos.length}`;
+    `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
 
 }
 
@@ -985,9 +1065,9 @@ function nextPhotoFunction() {
   currentPhotoIndex++;
 
 
-  if (
-    currentPhotoIndex >= galleryPhotos.length
-  ) {
+if (
+  currentPhotoIndex >= filteredGalleryPhotos.length
+)
 
     currentPhotoIndex = 0;
 
@@ -1006,8 +1086,8 @@ function previousPhotoFunction() {
 
   if (currentPhotoIndex < 0) {
 
-    currentPhotoIndex =
-      galleryPhotos.length - 1;
+currentPhotoIndex =
+  filteredGalleryPhotos.length - 1;
 
   }
 
