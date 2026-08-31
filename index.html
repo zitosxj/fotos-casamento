@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Fotos do Evento">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <title>Fotos do Evento</title>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div class="badge">📸</div>
+      <h1>Partilha as tuas fotos</h1>
+      <p>Escolhe as fotografias que queres juntar ao álbum do evento.</p>
+    </section>
+
+    <section class="card">
+      <label class="upload-box" for="fileInput">
+        <span class="upload-icon">＋</span>
+        <strong>Escolher fotografias</strong>
+        <small>Podes selecionar várias de uma vez</small>
+      </label>
+      <input id="fileInput" type="file" accept="image/*" multiple>
+
+      <div id="preview" class="preview hidden"></div>
+
+      <label class="field">
+        <span>Nome (opcional)</span>
+        <input id="nameInput" type="text" maxlength="80" placeholder="Ex.: João">
+      </label>
+
+      <button id="uploadBtn" disabled>Enviar fotografias</button>
+      <div id="status" class="status" role="status"></div>
+    </section>
+
+    <p class="privacy">As fotografias são enviadas para o álbum privado do organizador.</p>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
