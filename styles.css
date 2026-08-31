@@ -1357,3 +1357,43 @@ button {
     repeat(auto-fill, minmax(120px, 1fr));
   gap: 10px;
 }
+/* ==========================================
+   CORREÇÃO DEFINITIVA — PASTAS UMA ABAIXO DA OUTRA
+========================================== */
+
+
+/* A galeria principal NÃO pode ser uma grelha */
+
+#galleryGrid {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Cada pasta ocupa toda a largura */
+
+.gallery-folder-section {
+  display: block !important;
+  width: 100% !important;
+  margin-bottom: 32px;
+}
+
+/* O cabeçalho da pasta */
+
+.gallery-folder-divider {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+
+/* AQUI sim: as fotos ficam em grelha */
+
+.gallery-folder-grid {
+  display: grid !important;
+  width: 100%;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
