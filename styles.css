@@ -1410,12 +1410,9 @@ button {
 
   border-radius: 18px;
 
-  background:
-    rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .88);
 
-  border:
-    1px solid
-    rgba(231, 92, 123, .18);
+  border: 1px solid rgba(231, 92, 123, .18);
 
 }
 
@@ -1427,8 +1424,6 @@ button {
   font-weight: 700;
 
   margin-bottom: 10px;
-
-  color: var(--pink-dark);
 
 }
 
@@ -1443,8 +1438,7 @@ button {
 
   border-radius: 20px;
 
-  background:
-    rgba(231, 92, 123, .12);
+  background: rgba(231, 92, 123, .12);
 
 }
 
@@ -1464,8 +1458,7 @@ button {
       #e75c7b
     );
 
-  transition:
-    width .35s ease;
+  transition: width .35s ease;
 
 }
 
@@ -1480,12 +1473,10 @@ button {
 
   margin-top: 7px;
 
-  color: var(--pink-dark);
-
 }
 
 
-/* LISTA */
+/* Lista */
 
 .upload-progress-list {
 
@@ -1504,7 +1495,7 @@ button {
 }
 
 
-/* CADA FOTO */
+/* Cada fotografia */
 
 .upload-progress-item {
 
@@ -1526,7 +1517,7 @@ button {
   font-size: 13px;
 
   background:
-    rgba(255,255,255,.7);
+    rgba(255, 255, 255, .7);
 
 }
 
@@ -1546,19 +1537,16 @@ button {
 
   font-size: 11px;
 
-  opacity: .72;
+  opacity: .75;
 
 }
 
 
-/* ESTADOS */
-
 .upload-progress-item.preparing,
-.upload-progress-item.uploading,
-.upload-progress-item.checking {
+.upload-progress-item.uploading {
 
   background:
-    rgba(243, 166, 184, .12);
+    rgba(243, 166, 184, .15);
 
 }
 
@@ -1566,7 +1554,7 @@ button {
 .upload-progress-item.success {
 
   background:
-    rgba(110, 190, 130, .10);
+    rgba(110, 190, 130, .12);
 
 }
 
@@ -1574,6 +1562,6 @@ button {
 .upload-progress-item.error {
 
   background:
-    rgba(220, 80, 80, .10);
+    rgba(220, 80, 80, .12);
 
 }
