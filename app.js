@@ -834,7 +834,7 @@ uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥
         
         if (file.type.startsWith("video/") && file.size > MAX_VIDEO_SIZE)
         {
-          throw new Error("O vídeo é demasiado grande. O máximo permitido é 45 MB.");    
+          throw new Error("O vídeo é demasiado grande. O máximo permitido é 30 MB.");    
         }
         
         // -------------------------------
@@ -1608,29 +1608,40 @@ item.className =
 
 if (photo.type === "video") {
 
-  console.log("VÍDEO:", photo);
-  lightboxVideo.src = photo.url;
+  const image =
+    document.createElement("img");
 
-  lightboxVideo.controls = true;
-  lightboxVideo.preload = "auto";
-  lightboxVideo.classList.remove("hidden");
-  lightboxVideo.load();
-  
+  image.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
-  /*const video = document.createElement("video");
-  video.src = photo.thumbnail;
-  video.muted = true;
-  video.playsInline = true;
-  video.preload = "auto";
-  video.currentTime = 0.1;
-  
-  item.appendChild(video);
+  image.dataset.src =
+    photo.thumbnail;
 
-  const badge = document.createElement("div");
-  badge.className = "video-badge";
-  badge.textContent = "▶";
+  image.alt =
+    photo.name || "Vídeo do casamento";
+
+  image.loading =
+    "lazy";
+
+  image.decoding =
+    "async";
+
+  item.appendChild(image);
+
+
+  // ▶️ Ícone de vídeo
+
+  const badge =
+    document.createElement("div");
+
+  badge.className =
+    "video-badge";
+
+  badge.textContent =
+    "▶";
+
   item.appendChild(badge);
-  */
+
 }
 
 // ==========================================
@@ -1764,157 +1775,181 @@ function lazyLoadGalleryImages() {
   );
 
 }
+
 // ==========================================
-// LIGHTBOX
+// 🎥 URL DE REPRODUÇÃO DO VÍDEO
+// ==========================================
+
+function getVideoUrl(photo) {
+
+  // Se o servidor já enviar uma URL
+  // usamos essa primeiro
+  if (photo.url) {
+    return photo.url;
+  }
+
+  // Segurança: gerar URL pelo ID
+  return (
+    "https://drive.google.com/uc?export=download&id=" +
+    encodeURIComponent(photo.id)
+  );
+}
+
+// ==========================================
+// 🖼️ LIGHTBOX
 // ==========================================
 
 function openLightbox(index) {
-
   currentPhotoIndex = index;
-
-  showCurrentPhoto();
-
   lightbox.classList.remove("hidden");
+  showCurrentPhoto();
 }
 
-
+// ==========================================
+// MOSTRAR FOTO OU VÍDEO ATUAL
+// ==========================================
 function showCurrentPhoto() {
-
   const photo =
     filteredGalleryPhotos[currentPhotoIndex];
-
   if (!photo) return;
 
-
   // ==========================================
-  // 🧹 ESCONDER OS DOIS PRIMEIRO
+  // ESCONDER CONTEÚDO ANTERIOR
   // ==========================================
 
   lightboxImage.classList.add("hidden");
-
   lightboxVideo.classList.add("hidden");
 
-
-  // Parar vídeo anterior
-
+  // ==========================================
+  // PARAR VÍDEO ANTERIOR
+  // ==========================================
   lightboxVideo.pause();
-
   lightboxVideo.removeAttribute("src");
-
   lightboxVideo.load();
-
 
   // ==========================================
   // 🎥 VÍDEO
   // ==========================================
 
   if (photo.type === "video") {
+    console.log(
+      "🎥 A abrir vídeo:",
+      photo
+    );
 
+    const videoUrl =
+      getVideoUrl(photo);
+
+    // Limpar primeiro
+    lightboxVideo.removeAttribute("src");
+
+    // Definir nova origem
     lightboxVideo.src =
-      photo.url;
+      videoUrl;
 
+    lightboxVideo.type =
+      photo.mimeType || "video/mp4";
+
+    // Mostrar vídeo
     lightboxVideo.classList.remove("hidden");
 
-  }
+    // Carregar vídeo
+    lightboxVideo.load();
 
+    // Atualizar contador
+    lightboxCounter.textContent =
+      `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
+
+    return;
+  }
 
   // ==========================================
   // 📸 FOTOGRAFIA
   // ==========================================
 
-  else {
+  lightboxImage.src =
+    photo.url;
 
-    lightboxImage.src =
-      photo.url;
-
-    lightboxImage.classList.remove("hidden");
-
-  }
-
+  lightboxImage.alt =
+    photo.name || "Fotografia do casamento";
+  lightboxImage.classList.remove("hidden");
 
   // ==========================================
   // CONTADOR
   // ==========================================
-
   lightboxCounter.textContent =
     `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
-
 }
 
+// ==========================================
+// FECHAR LIGHTBOX
+// ==========================================
 
 function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
 
-
-  // Limpar fotografia
-
+  // Limpar imagem
   lightboxImage.src = "";
 
-
   // Parar vídeo
-
   lightboxVideo.pause();
-
   lightboxVideo.removeAttribute("src");
-
   lightboxVideo.load();
-
 }
 
+// ==========================================
+// PRÓXIMO
+// ==========================================
 
 function nextPhotoFunction() {
-
   currentPhotoIndex++;
-
   if (
     currentPhotoIndex >= filteredGalleryPhotos.length
   ) {
-
     currentPhotoIndex = 0;
-
   }
-
   showCurrentPhoto();
-
 }
 
+// ==========================================
+// ANTERIOR
+// ==========================================
 
 function previousPhotoFunction() {
 
   currentPhotoIndex--;
-
-
-  if (currentPhotoIndex < 0) {
-
-currentPhotoIndex =
-  filteredGalleryPhotos.length - 1;
-
+  if (
+    currentPhotoIndex < 0
+  ) {
+    currentPhotoIndex =
+      filteredGalleryPhotos.length - 1;
   }
-
-
   showCurrentPhoto();
-
 }
 
+// ==========================================
+// BOTÕES
+// ==========================================
 
 closeLightbox.addEventListener(
   "click",
   closeLightboxFunction
 );
 
-
 nextPhoto.addEventListener(
   "click",
   nextPhotoFunction
 );
-
 
 previousPhoto.addEventListener(
   "click",
   previousPhotoFunction
 );
 
+// ==========================================
+// TECLADO
+// ==========================================
 
 document.addEventListener(
   "keydown",
@@ -1924,24 +1959,19 @@ document.addEventListener(
       lightbox.classList.contains("hidden")
     ) return;
 
-
     if (event.key === "Escape") {
       closeLightboxFunction();
     }
-
 
     if (event.key === "ArrowRight") {
       nextPhotoFunction();
     }
 
-
     if (event.key === "ArrowLeft") {
       previousPhotoFunction();
     }
-
   }
 );
-
 
 // ==========================================
 // ATUALIZAR GALERIA
