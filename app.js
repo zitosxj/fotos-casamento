@@ -1,6 +1,6 @@
 // ==========================================
 // 💒 CASAMENTO DA OLÍVIA & LUIS
-// APP V3
+// APP V6
 // ==========================================
 
 
@@ -16,7 +16,11 @@ const SCRIPT_URL =
 
 const EVENT_CODE = "OLIVIA2026";
 
-
+// ==========================================
+// 🎥 TAMANHO MÁXIMO DOS VÍDEOS
+// ==========================================
+const MAX_VIDEO_SIZE =
+  45 * 1024 * 1024;
 // ==========================================
 // ELEMENTOS
 // ==========================================
@@ -105,6 +109,9 @@ const lightbox =
 
 const lightboxImage =
   document.getElementById("lightboxImage");
+
+const lightboxVideo =
+  document.getElementById("lightboxVideo");
 
 const lightboxCounter =
   document.getElementById("lightboxCounter");
@@ -283,123 +290,157 @@ galleryTab.addEventListener(
 
 
 // ==========================================
-// SELECIONAR FOTOS
+// SELECIONAR FOTOS E VÍDEOS
 // ==========================================
 
 photoInput.addEventListener(
   "change",
   () => {
-
     selectedFiles =
       Array.from(photoInput.files);
-
-
     previewGrid.innerHTML = "";
 
-
     if (!selectedFiles.length) {
-
       selectedInfo.textContent = "";
-
       return;
-
     }
 
+    const totalPhotos =
+      selectedFiles.filter(
+        file => file.type.startsWith("image/")
+      ).length;
+
+    const totalVideos =
+      selectedFiles.filter(
+        file => file.type.startsWith("video/")
+      ).length;
+
+    const parts = [];
+
+    if (totalPhotos) {
+      parts.push(
+        `${totalPhotos} foto${totalPhotos !== 1 ? "s" : ""}`
+      );
+    }
+
+    if (totalVideos) {
+      parts.push(
+        `${totalVideos} vídeo${totalVideos !== 1 ? "s" : ""}`
+      );
+    }
 
     selectedInfo.textContent =
-      `${selectedFiles.length} fotografia(s) selecionada(s)`;
-
+      `Selecionaste ${parts.join(" e ")} 💗`;
 
     selectedFiles.forEach(
-      (file) => {
+      file => {
 
-        const image =
-          document.createElement("img");
+        const previewItem =
+          document.createElement("div");
 
+        previewItem.className =
+          "preview-item";
 
-        image.src =
+        const objectUrl =
           URL.createObjectURL(file);
 
+        // ==============================
+        // 📸 FOTOGRAFIA
+        // ==============================
 
-        previewGrid.appendChild(image);
+        if (file.type.startsWith("image/")) {
+          const image =
+            document.createElement("img");
+          image.src =
+            objectUrl;
+          image.alt =
+            file.name;
+          previewItem.appendChild(image);
+        }
 
+        // ==============================
+        // 🎥 VÍDEO
+        // ==============================
+
+        else if (file.type.startsWith("video/")) {
+          const video =
+            document.createElement("video");
+          video.src =
+            objectUrl;
+          video.muted =
+            true;
+          video.playsInline =
+            true;
+          video.preload =
+            "metadata";
+          previewItem.appendChild(video);
+
+          const badge =
+            document.createElement("div");
+          badge.className =
+            "video-badge";
+          badge.textContent =
+            "▶";
+          previewItem.appendChild(badge);
+        }
+
+        previewGrid.appendChild(
+          previewItem
+        );
       }
     );
-
   }
 );
-
 
 // ==========================================
 // 📸 OTIMIZAR FOTO — MÁXIMA QUALIDADE
 // ==========================================
 
 async function compressImage(file) {
-
   // Fotos até 8 MB seguem no formato original
-
   const MAX_ORIGINAL_BYTES =
     8 * 1024 * 1024;
 
-
   if (file.size <= MAX_ORIGINAL_BYTES) {
-
     return file;
-
   }
 
-
   // Fotos maiores são otimizadas
-
   const image =
     await createImageBitmap(file);
 
-
   const maxSize = 4000;
-
 
   let width = image.width;
   let height = image.height;
 
-
   if (width > height && width > maxSize) {
-
     height =
       Math.round(
         height * maxSize / width
       );
-
     width = maxSize;
-
   }
 
-
   if (height > width && height > maxSize) {
-
     width =
       Math.round(
         width * maxSize / height
       );
-
     height = maxSize;
-
   }
-
 
   const canvas =
     document.createElement("canvas");
 
-
   canvas.width = width;
   canvas.height = height;
-
 
   const context =
     canvas.getContext(
       "2d",
       { alpha: false }
     );
-
 
   context.drawImage(
     image,
@@ -409,28 +450,20 @@ async function compressImage(file) {
     height
   );
 
-
   const blob =
     await new Promise(
       (resolve, reject) => {
-
         canvas.toBlob(
           blob => {
-
             if (blob) {
-
               resolve(blob);
-
             } else {
-
               reject(
                 new Error(
                   "Não foi possível processar esta fotografia."
                 )
               );
-
             }
-
           },
           "image/jpeg",
           0.95
@@ -439,14 +472,10 @@ async function compressImage(file) {
       }
     );
 
-
   image.close();
 
-
   return blob;
-
 }
-
 
 // ==========================================
 // BLOB → BASE64
@@ -475,167 +504,6 @@ function blobToBase64(blob) {
       reader.readAsDataURL(blob);
     }
   );
-}
-
-// ==========================================
-// 📊 INICIAR PROGRESSO
-// ==========================================
-
-function startUploadProgress(files) {
-
-  uploadProgress.classList.remove("hidden");
-
-  uploadProgressText.textContent =
-    `A preparar ${files.length} fotografia(s)...`;
-
-  uploadProgressBar.style.width = "0%";
-
-  uploadProgressPercent.textContent = "0%";
-
-  uploadProgressList.innerHTML = "";
-
-
-  files.forEach(
-    (file, index) => {
-
-      const item =
-        document.createElement("div");
-
-
-      item.className =
-        "upload-progress-item waiting";
-
-
-      item.id =
-        `upload-item-${index}`;
-
-
-      const icon =
-        document.createElement("span");
-
-      icon.className =
-        "upload-progress-icon";
-
-      icon.textContent = "⬜";
-
-
-      const name =
-        document.createElement("span");
-
-      name.className =
-        "upload-progress-name";
-
-      name.textContent =
-        file.name;
-
-
-      const status =
-        document.createElement("span");
-
-      status.className =
-        "upload-progress-status";
-
-      status.textContent =
-        "A aguardar";
-
-
-      item.appendChild(icon);
-      item.appendChild(name);
-      item.appendChild(status);
-
-      uploadProgressList.appendChild(item);
-
-    }
-  );
-
-}
-
-
-// ==========================================
-// 📊 ATUALIZAR FOTO
-// ==========================================
-
-function updateUploadItem(
-  index,
-  state,
-  message
-) {
-
-  const item =
-    document.getElementById(
-      `upload-item-${index}`
-    );
-
-
-  if (!item) return;
-
-
-  item.className =
-    `upload-progress-item ${state}`;
-
-
-  const icon =
-    item.querySelector(
-      ".upload-progress-icon"
-    );
-
-
-  const status =
-    item.querySelector(
-      ".upload-progress-status"
-    );
-
-
-  const icons = {
-
-    waiting: "⬜",
-    preparing: "⚙️",
-    uploading: "📤",
-    checking: "🔎",
-    success: "✅",
-    error: "❌"
-
-  };
-
-
-  icon.textContent =
-    icons[state] || "⬜";
-
-
-  status.textContent =
-    message;
-
-}
-
-
-// ==========================================
-// 📊 ATUALIZAR BARRA
-// ==========================================
-
-function updateUploadProgress(
-  completed,
-  total
-) {
-
-  const percent =
-    total > 0
-      ? Math.round(
-          (completed / total) * 100
-        )
-      : 0;
-
-
-  uploadProgressBar.style.width =
-    `${percent}%`;
-
-
-  uploadProgressPercent.textContent =
-    `${percent}%`;
-
-
-  uploadProgressText.textContent =
-    `${completed} de ${total} fotografia(s) processada(s)`;
-
 }
 
 // ==========================================
@@ -774,8 +642,8 @@ function startUploadProgress(files) {
 
   uploadProgress.classList.remove("hidden");
 
-  uploadProgressText.textContent =
-    `A preparar ${files.length} fotografia(s)...`;
+uploadProgressText.textContent =
+  `A preparar ${files.length} ficheiro(s)...`;
 
   uploadProgressBar.style.width = "0%";
 
@@ -901,7 +769,6 @@ function updateUploadProgress(
   completed,
   total
 ) {
-
   const percent =
     total
       ? Math.round(
@@ -909,18 +776,14 @@ function updateUploadProgress(
         )
       : 0;
 
-
   uploadProgressBar.style.width =
     `${percent}%`;
-
 
   uploadProgressPercent.textContent =
     `${percent}%`;
 
-
-  uploadProgressText.textContent =
-    `${completed} de ${total} fotografia(s) processada(s)`;
-
+uploadProgressText.textContent =
+  `${completed} de ${total} ficheiro(s) processado(s)`;
 }
 
 // ==========================================
@@ -931,38 +794,24 @@ uploadButton.addEventListener(
   "click",
   async () => {
 
-
     if (!selectedFiles.length) {
-
-      uploadStatus.textContent =
-        "Escolhe pelo menos uma fotografia 📸";
-
+uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥";
       return;
-
     }
 
-
     // Bloquear botão durante o envio
-
     uploadButton.disabled = true;
 
-
     // Limpar mensagem anterior
-
     uploadStatus.textContent = "";
 
-
     // Criar lista de progresso
-
     startUploadProgress(selectedFiles);
-
 
     let sent = 0;
     let failed = 0;
 
-
     const failedFiles = [];
-
 
     // ======================================
     // ENVIAR UMA FOTO DE CADA VEZ
@@ -974,28 +823,58 @@ uploadButton.addEventListener(
       index++
     ) {
 
-
-      const file =
-        selectedFiles[index];
+      const file = selectedFiles[index];
 
 
       try {
 
-
+        // ======================================
+        // 🎥 VERIFICAR TAMANHO DO VÍDEO
+        // ======================================
+        
+        if (file.type.startsWith("video/") && file.size > MAX_VIDEO_SIZE)
+        {
+          throw new Error("O vídeo é demasiado grande. O máximo permitido é 45 MB.");    
+        }
+        
         // -------------------------------
         // PREPARAR
         // -------------------------------
-
         updateUploadItem(
           index,
           "preparing",
           "A preparar..."
         );
 
-
-        const processedFile =
-          await compressImage(file);
-
+      let processedFile;
+      
+      // ======================================
+      // 📸 FOTOGRAFIA
+      // ======================================
+      
+      if (file.type.startsWith("image/")) {      
+        processedFile =
+          await compressImage(file);      
+      }
+            
+      // ======================================
+      // 🎥 VÍDEO
+      // ======================================
+      
+      else if (file.type.startsWith("video/")) {
+        // Não alterar nem comprimir o vídeo
+        processedFile = file;
+      }      
+      
+      // ======================================
+      // ❌ TIPO NÃO SUPORTADO
+      // ======================================
+      
+      else {      
+        throw new Error(
+          "Este tipo de ficheiro não é suportado."
+        );      
+      }
 
         // -------------------------------
         // CONVERTER
@@ -1015,66 +894,85 @@ uploadButton.addEventListener(
           "A enviar..."
         );
 
+        const uploadId = crypto.randomUUID();
 
         const payload = {
-
           code: EVENT_CODE,
-
-          participant:
-            participantName.value.trim(),
-
-          filename:
-            file.name,
+          uploadId: uploadId,
+          participant: participantName.value.trim(),
+          filename: file.name,
 
           mimeType:
             processedFile.type ||
             file.type ||
-            "image/jpeg",
+            "application/octet-stream",
 
-          data:
-            base64
+          data: base64
 
         };
-
 
         await fetch(
           SCRIPT_URL,
           {
-
             method: "POST",
-
             mode: "no-cors",
-
             headers: {
-
               "Content-Type":
                 "text/plain;charset=utf-8"
-
             },
-
             body:
               JSON.stringify(payload)
-
           }
         );
 
-
+        // -------------------------------
+        // CONFIRMAR ENVIO
+        // -------------------------------
+        
+        updateUploadItem(
+          index,
+          "checking",
+          "A confirmar..."
+        );
+        
+        
+        const result =
+          await checkUploadStatus(uploadId);
+        
+        
+        // -------------------------------
+        // ERRO CONFIRMADO
+        // -------------------------------
+        
+        if (!result.ok) {
+        
+          throw new Error(
+            result.error ||
+            "O servidor não confirmou o envio."
+          );
+        
+        }
+        
+        
         // -------------------------------
         // SUCESSO
         // -------------------------------
-
+        
         sent++;
-
-
+        
+        
+        const typeLabel =
+          file.type.startsWith("video/")
+            ? "Vídeo enviado"
+            : "Fotografia enviada";
+        
+        
         updateUploadItem(
           index,
           "success",
-          "Enviada"
+          typeLabel
         );
-
-
       } catch (error) {
-
 
         console.error(
           "Erro ao enviar:",
@@ -1082,9 +980,7 @@ uploadButton.addEventListener(
           error
         );
 
-
         failed++;
-
 
         updateUploadItem(
           index,
@@ -1092,15 +988,12 @@ uploadButton.addEventListener(
           "Não foi possível enviar"
         );
 
-
         failedFiles.push({
           index: index,
           name: file.name,
           error: error
         });
-
       }
-
 
       // Atualizar barra depois de cada foto
 
@@ -1485,20 +1378,15 @@ function applyFolderFilter() {
 
 
   renderGallery();
-
 }
-
 
 // ==========================================
 // LIMPAR FILTRO
 // ==========================================
 
 function clearFolderFilterFunction() {
-
   folderFilter.value = "";
-
   applyFolderFilter();
-
 }
 
 if (folderFilter) {
