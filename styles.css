@@ -787,105 +787,59 @@ button {
 ================================ */
 
 .lightbox {
-
   position: fixed;
-
   z-index: 100;
-
   inset: 0;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   background: rgba(15,10,12,.94);
-
 }
 
-
-.lightbox img {
-
+.lightbox img,
+.lightbox video {
   max-width: 90%;
-
   max-height: 85vh;
-
   border-radius: 12px;
-
   object-fit: contain;
-
 }
-
 
 .lightbox-close {
-
   position: absolute;
-
   top: 20px;
-
   left: 20px;
-
   border: none;
-
   background: transparent;
-
   color: white;
-
   font-size: 45px;
-
 }
-
 
 .lightbox-counter {
-
   position: absolute;
-
   top: 25px;
-
   color: white;
-
 }
-
 
 .lightbox-nav {
-
   position: absolute;
-
   top: 50%;
-
   transform: translateY(-50%);
-
   width: 55px;
-
   height: 55px;
-
   border-radius: 50%;
-
   border: none;
-
   background: rgba(255,255,255,.18);
-
   color: white;
-
   font-size: 45px;
-
 }
-
 
 .previous {
-
   left: 15px;
-
 }
-
 
 .next {
-
   right: 15px;
-
 }
-
 
 /* ===============================
    TELEMÓVEL
