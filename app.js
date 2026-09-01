@@ -1608,11 +1608,17 @@ item.className =
 
 if (photo.type === "video") {
 
-  const video =
-    document.createElement("video");
+  console.log("VÍDEO:", photo);
+  lightboxVideo.src = photo.url;
 
+  lightboxVideo.controls = true;
+  lightboxVideo.preload = "auto";
+  lightboxVideo.classList.remove("hidden");
+  lightboxVideo.load();
+  
+
+  /*const video = document.createElement("video");
   video.src = photo.thumbnail;
-
   video.muted = true;
   video.playsInline = true;
   video.preload = "auto";
@@ -1620,40 +1626,26 @@ if (photo.type === "video") {
   
   item.appendChild(video);
 
-
-  const badge =
-    document.createElement("div");
-
-  badge.className =
-    "video-badge";
-
-
-  badge.textContent =
-    "▶";
-
-
+  const badge = document.createElement("div");
+  badge.className = "video-badge";
+  badge.textContent = "▶";
   item.appendChild(badge);
-
+  */
 }
-
 
 // ==========================================
 // 📸 FOTOGRAFIA
 // ==========================================
 
 else {
-
   const image =
     document.createElement("img");
-
 
   image.src =
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
-
   image.dataset.src =
     photo.thumbnail;
-
 
   image.alt =
     photo.name;
