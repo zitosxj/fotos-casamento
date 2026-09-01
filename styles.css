@@ -800,8 +800,18 @@ button {
 .lightbox video {
   max-width: 90%;
   max-height: 85vh;
+  width: auto;
+  height: auto;
   border-radius: 12px;
   object-fit: contain;
+}
+
+.lightbox video {
+  max-width: 90vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  background: black;
 }
 
 .lightbox-close {
