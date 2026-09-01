@@ -113,214 +113,126 @@ button {
     scaleX(-1);
 }
 
-
 /* ===============================
    LOGIN
 ================================ */
 
 .login-screen {
-
   position: relative;
-
   z-index: 1;
-
   min-height: 100vh;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 20px;
-
 }
 
-
 .login-card {
-
   width: 100%;
-
   max-width: 520px;
-
   min-height: 680px;
-
   padding: 40px 28px 30px;
-
   text-align: center;
-
   border-radius: 32px;
-
   background:
-
     linear-gradient(
       180deg,
       rgba(255,255,255,.96),
       rgba(255,244,247,.96)
     );
-
   box-shadow: var(--soft-shadow);
-
   border: 1px solid rgba(231,92,123,.15);
-
 }
 
 
 .heart {
-
   color: var(--pink);
-
   font-size: 34px;
-
 }
-
 
 .login-card h1 {
-
   margin: 10px 0 5px;
-
   font-family: "Great Vibes", cursive;
-
   font-weight: normal;
-
   font-size: clamp(44px, 9vw, 70px);
-
   line-height: .95;
-
   color: var(--pink-dark);
-
 }
-
 
 .login-card h1 span {
-
   display: block;
-
 }
-
 
 .title-line {
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 10px;
-
   margin: 20px 0 32px;
-
   color: var(--pink);
-
 }
-
 
 .title-line span {
-
   display: block;
-
   width: 60px;
-
   height: 1px;
-
   background: var(--pink);
-
 }
-
 
 .code-label {
-
   margin-bottom: 10px;
-
   font-size: 15px;
-
 }
-
 
 #eventCode {
-
   width: 100%;
-
   padding: 18px;
-
   border-radius: 16px;
-
   border: 2px solid #f3b7c5;
-
   background: white;
-
   text-align: center;
-
   letter-spacing: 5px;
-
   font-weight: 600;
-
   font-size: 18px;
-
   outline: none;
-
   text-transform: uppercase;
-
 }
 
-
 #eventCode:focus {
-
   border-color: var(--pink);
-
   box-shadow:
     0 0 0 4px rgba(231,92,123,.12);
-
 }
 
 
 .primary-button {
-
   width: 100%;
-
   border: none;
-
   border-radius: 16px;
-
   margin-top: 16px;
-
   padding: 17px 22px;
-
   background:
-
     linear-gradient(
       135deg,
       var(--pink),
       #ef7893
     );
-
   color: white;
-
   font-size: 16px;
-
   font-weight: 700;
-
   letter-spacing: 1px;
-
   box-shadow:
-
     0 8px 18px rgba(231,92,123,.25);
-
   transition:
     transform .2s,
     box-shadow .2s;
-
 }
 
 
 .primary-button:hover {
-
   transform: translateY(-2px);
-
   box-shadow:
     0 12px 24px rgba(231,92,123,.35);
-
 }
 
 
@@ -484,16 +396,13 @@ button {
   box-shadow: var(--soft-shadow);
 }
 
-
 .side-menu.open {
   transform: translateX(0);
 }
 
-
 .side-menu h2 {
   color: var(--pink-dark);
 }
-
 
 .side-menu button {
   display: block;
@@ -506,11 +415,9 @@ button {
   text-align: left;
 }
 
-
 .close-menu {
   font-size: 30px;
 }
-
 
 .menu-overlay {
   position: fixed;
@@ -520,11 +427,9 @@ button {
   display: none;
 }
 
-
 .menu-overlay.open {
   display: block;
 }
-
 
 /* ===============================
    TABS
@@ -538,7 +443,6 @@ button {
   background: white;
 }
 
-
 .tab {
   flex: 1;
   max-width: 300px;
@@ -550,218 +454,120 @@ button {
   border-bottom: 3px solid transparent;
 }
 
-
 .tab.active {
-
   color: var(--pink-dark);
-
   border-bottom-color: var(--pink);
-
 }
-
 
 /* ===============================
    CONTEÚDO
 ================================ */
-
 .content-section {
-
   padding: 25px 18px;
-
 }
-
 
 .content-card {
-
   max-width: 650px;
-
   margin: auto;
-
   padding: 35px 25px;
-
   border-radius: 28px;
-
   background: rgba(255,255,255,.94);
-
   box-shadow: var(--soft-shadow);
-
 }
-
 
 .camera-icon {
-
   width: 75px;
-
   height: 75px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   margin: auto;
-
   border-radius: 50%;
-
   background: var(--pink-light);
-
   font-size: 36px;
-
 }
-
 
 .content-card h2 {
-
   text-align: center;
-
   margin: 18px 0 4px;
-
   font-size: 28px;
-
 }
-
 
 .small-heart-line {
-
   text-align: center;
-
   color: var(--pink);
-
 }
-
 
 .subtitle {
-
   max-width: 430px;
-
   margin: 15px auto 28px;
-
   text-align: center;
-
   color: #666;
-
 }
-
 
 .content-card label {
-
   display: block;
-
   margin: 18px 0 8px;
-
   font-weight: 500;
-
 }
-
 
 .content-card label span {
-
   color: #999;
-
   font-weight: normal;
-
 }
-
 
 .content-card input[type="text"] {
-
   width: 100%;
-
   padding: 16px;
-
   border-radius: 14px;
-
   border: 1px solid #ddd;
-
   outline: none;
-
 }
-
 
 .file-picker {
-
   display: flex !important;
-
   align-items: center;
-
   gap: 16px;
-
   padding: 18px;
-
   border-radius: 16px;
-
   border: 2px dashed #f0a7b8;
-
   background: #fff8fa;
-
   cursor: pointer;
-
 }
-
 
 .plus {
-
   width: 48px;
-
   height: 48px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   border-radius: 50%;
-
   background: white;
-
   color: var(--pink);
-
   font-size: 35px;
-
 }
-
 
 .file-picker strong {
-
   display: block;
-
 }
-
 
 .file-picker small {
-
   color: #888;
-
 }
-
 
 .selected-info {
-
   margin-top: 15px;
-
   color: var(--pink-dark);
-
   font-weight: 600;
-
 }
-
 
 .preview-grid {
-
   display: grid;
-
   grid-template-columns:
-
     repeat(auto-fill, minmax(75px, 1fr));
-
   gap: 8px;
-
   margin-top: 15px;
-
 }
-
 
 /* ==========================================
    📸🎥 MINIATURAS DAS FOTOS E VÍDEOS
@@ -785,22 +591,33 @@ button {
   border-radius: 10px;
 }
 
-
-.upload-button {
-
-  margin-top: 25px;
-
+.video-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform:
+    translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background:
+    rgba(0, 0, 0, .55);
+  color: white;
+  font-size: 20px;
+  pointer-events: none;
 }
 
+.upload-button {
+  margin-top: 25px;
+}
 
 .upload-status {
-
   text-align: center;
-
   margin-top: 15px;
-
   font-size: 14px;
-
 }
 
 
