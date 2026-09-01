@@ -1787,17 +1787,19 @@ function lazyLoadGalleryImages() {
 
 function getVideoUrl(photo) {
 
-  // Se o servidor já enviar uma URL
-  // usamos essa primeiro
+  // Se o servidor já enviou URL,
+  // usar essa URL primeiro
+
   if (photo.url) {
     return photo.url;
   }
 
-  // Segurança: gerar URL pelo ID
+  // Alternativa
+
   return (
-    "https://drive.google.com/uc?export=download&id=" +
-    encodeURIComponent(photo.id)
+    `https://drive.google.com/uc?export=download&id=${photo.id}`
   );
+
 }
 
 // ==========================================
@@ -1814,76 +1816,137 @@ function openLightbox(index) {
 // MOSTRAR FOTO OU VÍDEO ATUAL
 // ==========================================
 function showCurrentPhoto() {
+
   const photo =
     filteredGalleryPhotos[currentPhotoIndex];
+
   if (!photo) return;
 
+
   // ==========================================
-  // ESCONDER CONTEÚDO ANTERIOR
+  // CONTADOR
+  // ==========================================
+
+  lightboxCounter.textContent =
+    `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
+
+
+  // ==========================================
+  // ESCONDER ELEMENTOS
   // ==========================================
 
   lightboxImage.classList.add("hidden");
+
   lightboxVideo.classList.add("hidden");
 
+
   // ==========================================
-  // PARAR VÍDEO ANTERIOR
+  // LIMPAR VÍDEO ANTERIOR
   // ==========================================
+
   lightboxVideo.pause();
+
   lightboxVideo.removeAttribute("src");
+
   lightboxVideo.load();
+
 
   // ==========================================
   // 🎥 VÍDEO
   // ==========================================
 
   if (photo.type === "video") {
-    console.log(
-      "🎥 A abrir vídeo:",
-      photo
-    );
 
     const videoUrl =
       getVideoUrl(photo);
 
-    // Limpar primeiro
-    lightboxVideo.removeAttribute("src");
 
-    // Definir nova origem
+    console.log(
+      "🎥 Vídeo selecionado:",
+      photo
+    );
+
+
+    console.log(
+      "🎥 URL:",
+      videoUrl
+    );
+
+
+    lightboxVideo.poster =
+      photo.thumbnail ||
+      `https://drive.google.com/thumbnail?id=${photo.id}&sz=w1200`;
+
+
     lightboxVideo.src =
       videoUrl;
 
-    lightboxVideo.type =
-      photo.mimeType || "video/mp4";
 
-    // Mostrar vídeo
-    lightboxVideo.classList.remove("hidden");
+    lightboxVideo.controls =
+      true;
 
-    // Carregar vídeo
+    lightboxVideo.muted =
+      false;
+
+    lightboxVideo.playsInline =
+      true;
+
+    lightboxVideo.preload =
+      "metadata";
+
+
+    lightboxVideo.onerror =
+      () => {
+
+        console.error(
+          "❌ Não foi possível reproduzir o vídeo.",
+          lightboxVideo.error
+        );
+
+      };
+
+
+    lightboxVideo.onloadeddata =
+      () => {
+
+        console.log(
+          "✅ Vídeo carregado!"
+        );
+
+      };
+
+
+    lightboxVideo.classList.remove(
+      "hidden"
+    );
+
+
     lightboxVideo.load();
 
-    // Atualizar contador
-    lightboxCounter.textContent =
-      `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
-
-    return;
   }
+
 
   // ==========================================
   // 📸 FOTOGRAFIA
   // ==========================================
 
-  lightboxImage.src =
-    photo.url;
+  else {
 
-  lightboxImage.alt =
-    photo.name || "Fotografia do casamento";
-  lightboxImage.classList.remove("hidden");
+    lightboxImage.src =
+      photo.url;
 
-  // ==========================================
-  // CONTADOR
-  // ==========================================
-  lightboxCounter.textContent =
-    `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
+
+    lightboxImage.alt =
+      photo.name ||
+      "Fotografia do casamento";
+
+
+    lightboxImage.classList.remove(
+      "hidden"
+    );
+
+  }
+
 }
 
 // ==========================================
