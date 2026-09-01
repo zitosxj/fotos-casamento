@@ -807,10 +807,6 @@ button {
 }
 
 .lightbox video {
-  max-width: 90vw;
-  max-height: 85vh;
-  width: auto;
-  height: auto;
   background: black;
 }
 
