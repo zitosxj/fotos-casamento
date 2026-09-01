@@ -1,6 +1,6 @@
 // ==========================================
 // 💒 CASAMENTO DA OLÍVIA & LUIS
-// APP V6
+// APP V8
 // ==========================================
 
 
@@ -1611,24 +1611,18 @@ if (photo.type === "video") {
   const video =
     document.createElement("video");
 
-
-  video.src =
-    photo.thumbnail;
-
+  video.src = photo.thumbnail;
 
   video.muted = true;
-
   video.playsInline = true;
-
-  video.preload = "metadata";
-
-
+  video.preload = "auto";
+  video.currentTime = 0.1;
+  
   item.appendChild(video);
 
 
   const badge =
     document.createElement("div");
-
 
   badge.className =
     "video-badge";
@@ -1786,12 +1780,9 @@ function openLightbox(index) {
 
   currentPhotoIndex = index;
 
-
   showCurrentPhoto();
 
-
   lightbox.classList.remove("hidden");
-
 }
 
 
@@ -1800,17 +1791,25 @@ function showCurrentPhoto() {
   const photo =
     filteredGalleryPhotos[currentPhotoIndex];
 
-
   if (!photo) return;
 
 
   // ==========================================
-  // ESCONDER AMBOS PRIMEIRO
+  // 🧹 ESCONDER OS DOIS PRIMEIRO
   // ==========================================
 
   lightboxImage.classList.add("hidden");
 
   lightboxVideo.classList.add("hidden");
+
+
+  // Parar vídeo anterior
+
+  lightboxVideo.pause();
+
+  lightboxVideo.removeAttribute("src");
+
+  lightboxVideo.load();
 
 
   // ==========================================
@@ -1822,11 +1821,7 @@ function showCurrentPhoto() {
     lightboxVideo.src =
       photo.url;
 
-
     lightboxVideo.classList.remove("hidden");
-
-
-    lightboxImage.src = "";
 
   }
 
@@ -1840,15 +1835,7 @@ function showCurrentPhoto() {
     lightboxImage.src =
       photo.url;
 
-
     lightboxImage.classList.remove("hidden");
-
-
-    lightboxVideo.pause();
-
-    lightboxVideo.removeAttribute("src");
-
-    lightboxVideo.load();
 
   }
 
