@@ -1612,24 +1612,29 @@ if (photo.type === "video") {
     document.createElement("img");
 
   image.src =
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-
-  image.dataset.src =
-    photo.thumbnail;
+    photo.thumbnail ||
+    `https://drive.google.com/thumbnail?id=${photo.id}&sz=w600`;
 
   image.alt =
     photo.name || "Vídeo do casamento";
 
-  image.loading =
-    "lazy";
+  image.loading = "lazy";
 
-  image.decoding =
-    "async";
+  image.decoding = "async";
+
+  image.onerror = () => {
+
+    console.warn(
+      "Não foi possível carregar thumbnail:",
+      photo.name
+    );
+
+  };
 
   item.appendChild(image);
 
 
-  // ▶️ Ícone de vídeo
+  // ▶️ SÍMBOLO DE VÍDEO
 
   const badge =
     document.createElement("div");
@@ -1637,7 +1642,7 @@ if (photo.type === "video") {
   badge.className =
     "video-badge";
 
-  badge.textContent =
+  badge.innerHTML =
     "▶";
 
   item.appendChild(badge);
