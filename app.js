@@ -936,22 +936,38 @@ uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥
         );
         
         
-        const result =
-          await checkUploadStatus(uploadId);
-        
-        
-        // -------------------------------
-        // ERRO CONFIRMADO
-        // -------------------------------
-        
-        if (!result.ok) {
-        
-          throw new Error(
-            result.error ||
-            "O servidor não confirmou o envio."
-          );
-        
-        }
+let result;
+let attempts = 0;
+const maxAttempts = 20;
+
+do {
+  result =
+    await checkUploadStatus(uploadId);
+
+  // Se ainda estiver a processar,
+  // esperar e tentar novamente
+  if (
+    result.status === "processing"
+  ) {
+    await new Promise(
+      resolve =>
+        setTimeout(resolve, 1000)
+    );
+    attempts++;
+  }
+
+} while (
+  result.status === "processing" &&
+  attempts < maxAttempts
+);
+
+// Se deu erro
+if (!result.ok) {
+  throw new Error(
+    result.error ||
+    "O servidor não confirmou o envio."
+  );
+}
         
         
         // -------------------------------
@@ -1011,10 +1027,21 @@ uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥
 
     if (failed === 0) {
 
-
-      uploadStatus.innerHTML =
-        `💗 <strong>Tudo pronto!</strong><br>` +
-        `✅ ${sent} fotografia(s) enviada(s) com sucesso! 📸`;
+    const sentPhotos =
+      selectedFiles.filter(
+        file =>
+          file.type.startsWith("image/")
+      ).length;
+    
+    const sentVideos =
+      selectedFiles.filter(
+        file =>
+          file.type.startsWith("video/")
+      ).length;
+    
+    uploadStatus.innerHTML =
+      `💗 <strong>Tudo pronto!</strong><br>` +
+      `✅ ${sent} ficheiro(s) enviado(s) com sucesso! 📸🎥`;
 
 
       // Limpar seleção
@@ -1567,36 +1594,85 @@ function renderGallery() {
           );
 
 
-        const item =
-          document.createElement("div");
+const item =
+  document.createElement("div");
 
 
-        item.className =
-          "gallery-item";
+item.className =
+  "gallery-item";
 
 
-        const image =
-          document.createElement("img");
+// ==========================================
+// 🎥 VÍDEO
+// ==========================================
+
+if (photo.type === "video") {
+
+  const video =
+    document.createElement("video");
 
 
-        image.src =
-          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  video.src =
+    photo.thumbnail;
 
 
-        image.dataset.src =
-          photo.thumbnail;
+  video.muted = true;
+
+  video.playsInline = true;
+
+  video.preload = "metadata";
 
 
-        image.alt =
-          photo.name;
+  item.appendChild(video);
 
 
-        image.loading = "lazy";
-        image.decoding = "async";
+  const badge =
+    document.createElement("div");
 
 
-        item.appendChild(image);
+  badge.className =
+    "video-badge";
 
+
+  badge.textContent =
+    "▶";
+
+
+  item.appendChild(badge);
+
+}
+
+
+// ==========================================
+// 📸 FOTOGRAFIA
+// ==========================================
+
+else {
+
+  const image =
+    document.createElement("img");
+
+
+  image.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+
+  image.dataset.src =
+    photo.thumbnail;
+
+
+  image.alt =
+    photo.name;
+
+
+  image.loading = "lazy";
+
+  image.decoding = "async";
+
+
+  item.appendChild(image);
+
+}
 
         item.addEventListener(
           "click",
@@ -1721,16 +1797,65 @@ function openLightbox(index) {
 
 function showCurrentPhoto() {
 
-const photo =
-  filteredGalleryPhotos[currentPhotoIndex];
+  const photo =
+    filteredGalleryPhotos[currentPhotoIndex];
 
 
   if (!photo) return;
 
 
-  lightboxImage.src =
-    photo.url;
+  // ==========================================
+  // ESCONDER AMBOS PRIMEIRO
+  // ==========================================
 
+  lightboxImage.classList.add("hidden");
+
+  lightboxVideo.classList.add("hidden");
+
+
+  // ==========================================
+  // 🎥 VÍDEO
+  // ==========================================
+
+  if (photo.type === "video") {
+
+    lightboxVideo.src =
+      photo.url;
+
+
+    lightboxVideo.classList.remove("hidden");
+
+
+    lightboxImage.src = "";
+
+  }
+
+
+  // ==========================================
+  // 📸 FOTOGRAFIA
+  // ==========================================
+
+  else {
+
+    lightboxImage.src =
+      photo.url;
+
+
+    lightboxImage.classList.remove("hidden");
+
+
+    lightboxVideo.pause();
+
+    lightboxVideo.removeAttribute("src");
+
+    lightboxVideo.load();
+
+  }
+
+
+  // ==========================================
+  // CONTADOR
+  // ==========================================
 
   lightboxCounter.textContent =
     `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
@@ -1742,7 +1867,19 @@ function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
 
+
+  // Limpar fotografia
+
   lightboxImage.src = "";
+
+
+  // Parar vídeo
+
+  lightboxVideo.pause();
+
+  lightboxVideo.removeAttribute("src");
+
+  lightboxVideo.load();
 
 }
 
@@ -1897,7 +2034,7 @@ changeCodeButton.addEventListener(
   "click",
   () => {
 
-    sessionStorage.removeItem(
+    localStorage.removeItem(
       "weddingAccessUntil"
     );
 
