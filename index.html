@@ -393,38 +393,66 @@
 
 
 
-  <!-- =========================
-       VISUALIZADOR DE FOTO
-  ========================== -->
+<!-- =========================
+     VISUALIZADOR DE FOTOS E VÍDEOS
+========================== -->
 
-  <div id="lightbox" class="lightbox hidden">
+<div id="lightbox" class="lightbox hidden">
 
-    <button id="closeLightbox" class="lightbox-close">
-      ×
-    </button>
+  <button
+    id="closeLightbox"
+    class="lightbox-close"
+    type="button"
+  >
+    ×
+  </button>
 
-    <div id="lightboxCounter" class="lightbox-counter">
-      1 / 1
-    </div>
-
-    <button id="previousPhoto" class="lightbox-nav previous">
-      ‹
-    </button>
-
-
-    <img
-      id="lightboxImage"
-      src=""
-      alt="Fotografia do casamento"
-    >
-
-
-    <button id="nextPhoto" class="lightbox-nav next">
-      ›
-    </button>
-
+  <div
+    id="lightboxCounter"
+    class="lightbox-counter"
+  >
+    1 / 1
   </div>
 
+
+  <button
+    id="previousPhoto"
+    class="lightbox-nav previous"
+    type="button"
+  >
+    ‹
+  </button>
+
+
+  <!-- 📸 IMAGEM -->
+
+  <img
+    id="lightboxImage"
+    src=""
+    alt="Fotografia do casamento"
+  >
+
+
+  <!-- 🎥 VÍDEO -->
+
+  <video
+    id="lightboxVideo"
+    class="hidden"
+    controls
+    playsinline
+    preload="metadata"
+  ></video>
+
+
+  <button
+    id="nextPhoto"
+    class="lightbox-nav next"
+    type="button"
+  >
+    ›
+  </button>
+
+</div>
 
   <script src="app.js"></script>
 
