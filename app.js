@@ -1790,10 +1790,11 @@ function lazyLoadGalleryImages() {
 
 function getVideoUrl(photo) {
 
-  return (
-    `https://drive.google.com/uc?export=download&id=${photo.id}`
-  );
+  //return (
+  //  `https://drive.google.com/uc?export=download&id=${photo.id}`
+  //);
 
+  return `https://drive.google.com/uc?export=view&id=${photo.id}`;
 }
 
 // ==========================================
@@ -1864,7 +1865,7 @@ function showCurrentPhoto() {
   // 🎥 VÍDEO
   // ==========================================
   
-if (photo.type === "video") {
+/*if (photo.type === "video") {
 
   const videoUrl = getVideoUrl(photo);
 
@@ -1878,8 +1879,18 @@ if (photo.type === "video") {
   );
 
   return;
-}
+}*/
+  
+if (photo.type === "video") {
 
+  const videoUrl = getVideoUrl(photo);
+
+  lightbox.classList.add("hidden");
+
+  window.location.href = videoUrl;
+
+  return;
+}
 
   // ==========================================
   // 📸 FOTOGRAFIA
