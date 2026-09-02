@@ -1855,75 +1855,38 @@ function showCurrentPhoto() {
   // 🎥 VÍDEO
   // ==========================================
 
-  if (photo.type === "video") {
+// ==========================================
+// 🎥 VÍDEO
+// ==========================================
 
-    const videoUrl =
-      getVideoUrl(photo);
+if (photo.type === "video") {
 
+  console.log("🎥 A abrir vídeo:", photo);
 
-    console.log(
-      "🎥 Vídeo selecionado:",
-      photo
+  // Mostrar o vídeo
+  lightboxVideo.classList.remove("hidden");
+
+  // Garantir os controlos
+  lightboxVideo.controls = true;
+  lightboxVideo.playsInline = true;
+
+  // Usar o URL recebido do servidor
+  lightboxVideo.src = photo.url;
+
+  // Forçar o browser a carregar o vídeo
+  lightboxVideo.load();
+
+  // Diagnóstico caso o Google Drive não consiga reproduzir
+  lightboxVideo.onerror = function () {
+
+    console.error(
+      "❌ Erro ao carregar vídeo:",
+      lightboxVideo.error
     );
 
+  };
 
-    console.log(
-      "🎥 URL:",
-      videoUrl
-    );
-
-
-    lightboxVideo.poster =
-      photo.thumbnail ||
-      `https://drive.google.com/thumbnail?id=${photo.id}&sz=w1200`;
-
-
-    lightboxVideo.src =
-      videoUrl;
-
-
-    lightboxVideo.controls =
-      true;
-
-    lightboxVideo.muted =
-      false;
-
-    lightboxVideo.playsInline =
-      true;
-
-    lightboxVideo.preload =
-      "metadata";
-
-
-    lightboxVideo.onerror =
-      () => {
-
-        console.error(
-          "❌ Não foi possível reproduzir o vídeo.",
-          lightboxVideo.error
-        );
-
-      };
-
-
-    lightboxVideo.onloadeddata =
-      () => {
-
-        console.log(
-          "✅ Vídeo carregado!"
-        );
-
-      };
-
-
-    lightboxVideo.classList.remove(
-      "hidden"
-    );
-
-
-    lightboxVideo.load();
-
-  }
+}
 
 
   // ==========================================
