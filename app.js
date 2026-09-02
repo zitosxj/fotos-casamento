@@ -1863,39 +1863,15 @@ function showCurrentPhoto() {
   // ==========================================
   // 🎥 VÍDEO
   // ==========================================
-
+  
   if (photo.type === "video") {
-
-    console.log(
-      "🎥 A abrir vídeo diretamente:",
-      photo
-    );
-
-
-    const videoUrl =
-      getVideoUrl(photo);
-
-
-    console.log(
-      "🎥 URL do vídeo:",
-      videoUrl
-    );
-
-
-    lightboxVideo.src =
-      videoUrl;
-
-
-    lightboxVideo.classList.remove(
-      "hidden"
-    );
-
-
-    lightboxVideo.load();
-
-
+  
+    const videoUrl = getVideoUrl(photo);
+  
+    // Abrir o vídeo fora da aplicação
+    window.location.href = videoUrl;
+  
     return;
-
   }
 
 
