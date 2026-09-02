@@ -1826,58 +1826,25 @@ function showCurrentPhoto() {
   if (!photo) return;
 
 
-  // ==========================================
   // CONTADOR
-  // ==========================================
 
   lightboxCounter.textContent =
     `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
 
 
-  // ==========================================
   // ESCONDER TUDO
-  // ==========================================
 
   lightboxImage.classList.add("hidden");
-
-  lightboxVideo.classList.add("hidden");
 
   lightboxVideoFrame.classList.add("hidden");
 
 
-  // ==========================================
-  // PARAR VÍDEO HTML, SE EXISTIR
-  // ==========================================
-
-  if (lightboxVideo) {
-
-    try {
-
-      lightboxVideo.pause();
-
-      lightboxVideo.removeAttribute("src");
-
-    } catch (error) {
-
-      console.log(
-        "Vídeo HTML não estava ativo."
-      );
-
-    }
-
-  }
-
-
-  // ==========================================
-  // PARAR IFRAME ANTERIOR
-  // ==========================================
+  // PARAR VÍDEO ANTERIOR DO GOOGLE DRIVE
 
   lightboxVideoFrame.src = "";
 
 
-  // ==========================================
   // 🎥 VÍDEO
-  // ==========================================
 
   if (photo.type === "video") {
 
@@ -1895,7 +1862,7 @@ function showCurrentPhoto() {
     if (!photo.previewUrl) {
 
       console.error(
-        "❌ O vídeo não tem previewUrl!"
+        "❌ Este vídeo não tem previewUrl"
       );
 
       return;
@@ -1914,20 +1881,16 @@ function showCurrentPhoto() {
   }
 
 
-  // ==========================================
   // 📸 FOTOGRAFIA
-  // ==========================================
 
   else {
 
     lightboxImage.src =
       photo.url;
 
-
     lightboxImage.alt =
       photo.name ||
       "Fotografia do casamento";
-
 
     lightboxImage.classList.remove(
       "hidden"
@@ -1945,24 +1908,14 @@ function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
 
-  // Limpar fotografia
   lightboxImage.src = "";
 
-  // Parar vídeo HTML
-  if (lightboxVideo) {
-    try {
-      lightboxVideo.pause();
-      lightboxVideo.removeAttribute("src");
-    } catch (error) {}
-  }
-
   // Parar vídeo Google Drive
-  if (lightboxVideoFrame) {
-    lightboxVideoFrame.src = "";
-    lightboxVideoFrame.classList.add(
-      "hidden"
-    );
-  }
+
+  lightboxVideoFrame.src = "";
+
+  lightboxVideoFrame.classList.add("hidden");
+
 }
 
 // ==========================================
