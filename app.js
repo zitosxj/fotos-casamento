@@ -1832,71 +1832,52 @@ function showCurrentPhoto() {
     `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
 
 
-  // ESCONDER TUDO
+  // ESCONDER FOTO
 
   lightboxImage.classList.add("hidden");
 
-  lightboxVideoFrame.classList.add("hidden");
 
-
-  // PARAR VÍDEO ANTERIOR DO GOOGLE DRIVE
-
-  lightboxVideoFrame.src = "";
-
-
-  // 🎥 VÍDEO
+  // ==========================================
+  // 🎥 SE FOR VÍDEO
+  // ==========================================
 
   if (photo.type === "video") {
 
-    console.log(
-      "🎥 A abrir vídeo:",
-      photo
+    console.log("🎥 A abrir vídeo:", photo);
+
+
+    // URL do vídeo no Google Drive
+
+    const videoUrl =
+      `https://drive.google.com/file/d/${photo.id}/view`;
+
+
+    // Abrir diretamente numa nova página
+
+    window.open(
+      videoUrl,
+      "_blank"
     );
 
-    console.log(
-      "🎥 URL preview:",
-      photo.previewUrl
-    );
 
-
-    if (!photo.previewUrl) {
-
-      console.error(
-        "❌ Este vídeo não tem previewUrl"
-      );
-
-      return;
-
-    }
-
-
-    lightboxVideoFrame.src =
-      photo.previewUrl;
-
-
-    lightboxVideoFrame.classList.remove(
-      "hidden"
-    );
-
+    return;
   }
 
 
-  // 📸 FOTOGRAFIA
+  // ==========================================
+  // 📸 SE FOR FOTOGRAFIA
+  // ==========================================
 
-  else {
+  lightboxImage.src =
+    photo.url;
 
-    lightboxImage.src =
-      photo.url;
+  lightboxImage.alt =
+    photo.name ||
+    "Fotografia do casamento";
 
-    lightboxImage.alt =
-      photo.name ||
-      "Fotografia do casamento";
-
-    lightboxImage.classList.remove(
-      "hidden"
-    );
-
-  }
+  lightboxImage.classList.remove(
+    "hidden"
+  );
 
 }
 
