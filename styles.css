@@ -1418,3 +1418,148 @@ button {
     rgba(220, 80, 80, .12);
 
 }
+
+/* ========================================= */
+/* 🎥 AVISO PERSONALIZADO DOS VÍDEOS */
+/* ========================================= */
+
+.video-warning-modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(0, 0, 0, 0.55);
+
+  z-index: 100000;
+
+}
+
+
+.video-warning-modal.hidden {
+
+  display: none;
+
+}
+
+
+.video-warning-box {
+
+  width: 100%;
+
+  max-width: 420px;
+
+  background: white;
+
+  border-radius: 25px;
+
+  padding: 35px 28px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.30);
+
+  animation:
+    videoWarningAppear
+    0.25s ease-out;
+
+}
+
+
+.video-warning-icon {
+
+  font-size: 55px;
+
+  margin-bottom: 12px;
+
+}
+
+
+.video-warning-box h2 {
+
+  margin:
+    0 0 18px;
+
+  font-size: 25px;
+
+}
+
+
+.video-warning-box p {
+
+  line-height: 1.6;
+
+  margin:
+    12px 0;
+
+}
+
+
+.video-warning-button {
+
+  width: 100%;
+
+  margin-top: 22px;
+
+  padding: 16px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  background:
+    #b76e79;
+
+  color: white;
+
+}
+
+
+.video-warning-button:active {
+
+  transform:
+    scale(0.98);
+
+}
+
+
+@keyframes videoWarningAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(15px)
+      scale(0.96);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
