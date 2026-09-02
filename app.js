@@ -1790,17 +1790,8 @@ function lazyLoadGalleryImages() {
 
 function getVideoUrl(photo) {
 
-  // Se o servidor já enviou URL,
-  // usar essa URL primeiro
-
-  if (photo.url) {
-    return photo.url;
-  }
-
-  // Alternativa
-
   return (
-    `https://drive.google.com/uc?export=download&id=${photo.id}`
+    `https://drive.usercontent.google.com/download?id=${photo.id}&export=download&confirm=t`
   );
 
 }
@@ -1826,54 +1817,100 @@ function showCurrentPhoto() {
   if (!photo) return;
 
 
+  // ==========================================
   // CONTADOR
+  // ==========================================
 
   lightboxCounter.textContent =
     `${currentPhotoIndex + 1} / ${filteredGalleryPhotos.length}`;
 
 
-  // ESCONDER FOTO
+  // ==========================================
+  // ESCONDER TUDO
+  // ==========================================
 
   lightboxImage.classList.add("hidden");
 
+  lightboxVideo.classList.add("hidden");
+
+  lightboxVideoFrame.classList.add("hidden");
+
 
   // ==========================================
-  // 🎥 SE FOR VÍDEO
+  // PARAR VÍDEO ANTERIOR
   // ==========================================
 
-  if (photo.type === "video") {
+  if (lightboxVideo) {
 
-    console.log("🎥 A abrir vídeo:", photo);
+    lightboxVideo.pause();
 
+    lightboxVideo.removeAttribute("src");
 
-    // URL do vídeo no Google Drive
+    lightboxVideo.load();
 
-    const videoUrl =
-      `https://drive.google.com/file/d/${photo.id}/view`;
-
-
-    // Abrir diretamente numa nova página
-
-    window.open(
-      videoUrl,
-      "_blank"
-    );
+  }
 
 
-    return;
+  // Limpar iframe anterior
+
+  if (lightboxVideoFrame) {
+
+    lightboxVideoFrame.src = "";
+
   }
 
 
   // ==========================================
-  // 📸 SE FOR FOTOGRAFIA
+  // 🎥 VÍDEO
+  // ==========================================
+
+  if (photo.type === "video") {
+
+    console.log(
+      "🎥 A abrir vídeo diretamente:",
+      photo
+    );
+
+
+    const videoUrl =
+      getVideoUrl(photo);
+
+
+    console.log(
+      "🎥 URL do vídeo:",
+      videoUrl
+    );
+
+
+    lightboxVideo.src =
+      videoUrl;
+
+
+    lightboxVideo.classList.remove(
+      "hidden"
+    );
+
+
+    lightboxVideo.load();
+
+
+    return;
+
+  }
+
+
+  // ==========================================
+  // 📸 FOTOGRAFIA
   // ==========================================
 
   lightboxImage.src =
     photo.url;
 
+
   lightboxImage.alt =
     photo.name ||
     "Fotografia do casamento";
+
 
   lightboxImage.classList.remove(
     "hidden"
@@ -1889,13 +1926,36 @@ function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
 
+
+  // Limpar fotografia
+
   lightboxImage.src = "";
 
-  // Parar vídeo Google Drive
 
-  lightboxVideoFrame.src = "";
+  // Parar vídeo
 
-  lightboxVideoFrame.classList.add("hidden");
+  if (lightboxVideo) {
+
+    lightboxVideo.pause();
+
+    lightboxVideo.removeAttribute("src");
+
+    lightboxVideo.load();
+
+  }
+
+
+  // Limpar iframe
+
+  if (lightboxVideoFrame) {
+
+    lightboxVideoFrame.src = "";
+
+    lightboxVideoFrame.classList.add(
+      "hidden"
+    );
+
+  }
 
 }
 
