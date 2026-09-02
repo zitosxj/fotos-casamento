@@ -1901,14 +1901,23 @@ if (photo.type === "video") {
 
   lightboxImage.classList.remove("hidden");
 
+  // ==========================================
+  // 💬 MOSTRAR AVISO APENAS UMA VEZ
+  // ==========================================
+  const videoMessageSeen =
+    sessionStorage.getItem("videoMessageSeen");
 
-  // Mensagem para o utilizador
-  alert(
-    "🎥 Este vídeo foi enviado para a galeria.\n\n" +
-    "A reprodução de vídeos não está disponível na aplicação.\n\n" +
-    "💗 Depois do casamento, todos os vídeos serão reunidos para criar uma recordação especial!"
-  );
-
+  if (!videoMessageSeen) {
+    alert(
+      "🎥 Os vídeos foram enviados para guardar este momento especial!\n\n" +
+      "A reprodução de vídeos não está disponível na aplicação.\n\n" +
+      "💗 Depois do casamento, todos os vídeos serão reunidos para criar uma recordação especial!"
+    );
+    sessionStorage.setItem(
+      "videoMessageSeen",
+      "true"
+    );
+  }
   return;
 }
 
