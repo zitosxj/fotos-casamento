@@ -1835,41 +1835,85 @@ function showCurrentPhoto() {
 
 
   // ==========================================
-  // ESCONDER ELEMENTOS
+  // ESCONDER TUDO
   // ==========================================
 
   lightboxImage.classList.add("hidden");
+
   lightboxVideo.classList.add("hidden");
+
   lightboxVideoFrame.classList.add("hidden");
 
 
   // ==========================================
-  // LIMPAR VÍDEO ANTERIOR
+  // PARAR VÍDEO HTML, SE EXISTIR
   // ==========================================
 
-  lightboxVideo.pause();
-  lightboxVideo.removeAttribute("src");
-  //lightboxVideo.load();
+  if (lightboxVideo) {
 
-// ==========================================
-// 🎥 VÍDEO
-// ==========================================
+    try {
 
-if (photo.type === "video") {
+      lightboxVideo.pause();
 
-  console.log("🎥 A abrir vídeo:", photo);
+      lightboxVideo.removeAttribute("src");
 
-  // Limpar qualquer vídeo anterior
+    } catch (error) {
+
+      console.log(
+        "Vídeo HTML não estava ativo."
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // PARAR IFRAME ANTERIOR
+  // ==========================================
+
   lightboxVideoFrame.src = "";
 
-  // Usar o preview oficial do Google Drive
-  lightboxVideoFrame.src =
-    photo.previewUrl;
 
-  // Mostrar o iframe
-  lightboxVideoFrame.classList.remove("hidden");
-}
-  
+  // ==========================================
+  // 🎥 VÍDEO
+  // ==========================================
+
+  if (photo.type === "video") {
+
+    console.log(
+      "🎥 A abrir vídeo:",
+      photo
+    );
+
+    console.log(
+      "🎥 URL preview:",
+      photo.previewUrl
+    );
+
+
+    if (!photo.previewUrl) {
+
+      console.error(
+        "❌ O vídeo não tem previewUrl!"
+      );
+
+      return;
+
+    }
+
+
+    lightboxVideoFrame.src =
+      photo.previewUrl;
+
+
+    lightboxVideoFrame.classList.remove(
+      "hidden"
+    );
+
+  }
+
+
   // ==========================================
   // 📸 FOTOGRAFIA
   // ==========================================
@@ -1900,14 +1944,25 @@ if (photo.type === "video") {
 function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
-  lightboxImage.src = "";
-  lightboxVideo.pause();
-  lightboxVideo.removeAttribute("src");
-  //lightboxVideo.load();
 
-  // Parar vídeo do Google Drive
-  lightboxVideoFrame.src = "";
-  lightboxVideoFrame.classList.add("hidden");
+  // Limpar fotografia
+  lightboxImage.src = "";
+
+  // Parar vídeo HTML
+  if (lightboxVideo) {
+    try {
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute("src");
+    } catch (error) {}
+  }
+
+  // Parar vídeo Google Drive
+  if (lightboxVideoFrame) {
+    lightboxVideoFrame.src = "";
+    lightboxVideoFrame.classList.add(
+      "hidden"
+    );
+  }
 }
 
 // ==========================================
