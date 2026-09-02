@@ -1846,7 +1846,7 @@ function showCurrentPhoto() {
 
   lightboxVideo.pause();
   lightboxVideo.removeAttribute("src");
-  lightboxVideo.load();
+  //lightboxVideo.load();
 
 // ==========================================
 // 🎥 VÍDEO
@@ -1900,7 +1900,7 @@ function closeLightboxFunction() {
   lightboxImage.src = "";
   lightboxVideo.pause();
   lightboxVideo.removeAttribute("src");
-  lightboxVideo.load();
+  //lightboxVideo.load();
 
   // Parar vídeo do Google Drive
   lightboxVideoFrame.src = "";
