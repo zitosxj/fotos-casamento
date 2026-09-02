@@ -14,7 +14,7 @@ const SCRIPT_URL =
 //
 // A segurança REAL também está no Apps Script.
 
-const EVENT_CODE = "OLIVIA2026";
+const EVENT_CODE = "OLIVIA";
 
 // ==========================================
 // 🎥 TAMANHO MÁXIMO DOS VÍDEOS
@@ -1753,8 +1753,8 @@ function renderGallery() {
   .sort((a, b) => {
 
     // 📁 Geral aparece sempre primeiro
-    if (a === "Geral") return -1;
-    if (b === "Geral") return 1;
+    if (a.toLowerCase() === "Geral") return -1;
+    if (b.toLowerCase() === "Geral") return 1;
 
     // 📁 Restantes por ordem alfabética
     return a.localeCompare(b, "pt");
