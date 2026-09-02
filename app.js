@@ -111,7 +111,7 @@ const lightboxImage =
   document.getElementById("lightboxImage");
 
 const lightboxVideo =
-  document.getElementById("lightboxVideo");
+  document.getElementById("lightboxVideoFrame");
 
 const lightboxCounter =
   document.getElementById("lightboxCounter");
@@ -1836,8 +1836,8 @@ function showCurrentPhoto() {
   // ==========================================
 
   lightboxImage.classList.add("hidden");
-
   lightboxVideo.classList.add("hidden");
+  lightboxVideoFrame.classList.add("hidden");
 
 
   // ==========================================
@@ -1845,15 +1845,8 @@ function showCurrentPhoto() {
   // ==========================================
 
   lightboxVideo.pause();
-
   lightboxVideo.removeAttribute("src");
-
   lightboxVideo.load();
-
-
-  // ==========================================
-  // 🎥 VÍDEO
-  // ==========================================
 
 // ==========================================
 // 🎥 VÍDEO
@@ -1863,32 +1856,17 @@ if (photo.type === "video") {
 
   console.log("🎥 A abrir vídeo:", photo);
 
-  // Mostrar o vídeo
-  lightboxVideo.classList.remove("hidden");
+  // Limpar qualquer vídeo anterior
+  lightboxVideoFrame.src = "";
 
-  // Garantir os controlos
-  lightboxVideo.controls = true;
-  lightboxVideo.playsInline = true;
+  // Usar o preview oficial do Google Drive
+  lightboxVideoFrame.src =
+    photo.previewUrl;
 
-  // Usar o URL recebido do servidor
-  lightboxVideo.src = photo.url;
-
-  // Forçar o browser a carregar o vídeo
-  lightboxVideo.load();
-
-  // Diagnóstico caso o Google Drive não consiga reproduzir
-  lightboxVideo.onerror = function () {
-
-    console.error(
-      "❌ Erro ao carregar vídeo:",
-      lightboxVideo.error
-    );
-
-  };
-
+  // Mostrar o iframe
+  lightboxVideoFrame.classList.remove("hidden");
 }
-
-
+  
   // ==========================================
   // 📸 FOTOGRAFIA
   // ==========================================
@@ -1919,14 +1897,14 @@ if (photo.type === "video") {
 function closeLightboxFunction() {
 
   lightbox.classList.add("hidden");
-
-  // Limpar imagem
   lightboxImage.src = "";
-
-  // Parar vídeo
   lightboxVideo.pause();
   lightboxVideo.removeAttribute("src");
   lightboxVideo.load();
+
+  // Parar vídeo do Google Drive
+  lightboxVideoFrame.src = "";
+  lightboxVideoFrame.classList.add("hidden");
 }
 
 // ==========================================
