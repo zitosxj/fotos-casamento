@@ -113,6 +113,9 @@ const lightboxImage =
 const lightboxVideo =
   document.getElementById("lightboxVideo");
 
+const lightboxVideoFrame =
+  document.getElementById("lightboxVideoFrame");
+
 const lightboxCounter =
   document.getElementById("lightboxCounter");
 
