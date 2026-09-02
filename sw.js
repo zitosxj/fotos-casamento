@@ -1,4 +1,4 @@
-const CACHE = "event-photos-v7";
+const CACHE = "event-photos-v8";
 
 const ASSETS = [
   "./",
@@ -6,8 +6,12 @@ const ASSETS = [
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
+
   "./images/wedding-family.png",
-  "./images/wedding-family-header.png"
+  "./images/wedding-family-header.png",
+
+  "./images/icon-192.png",
+  "./images/icon-512.png"
 ];
 
 
