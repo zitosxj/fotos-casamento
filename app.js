@@ -1791,7 +1791,7 @@ function lazyLoadGalleryImages() {
 function getVideoUrl(photo) {
 
   return (
-    `https://drive.usercontent.google.com/download?id=${photo.id}&export=download&confirm=t`
+    `https://drive.google.com/uc?export=download&id=${photo.id}`
   );
 
 }
@@ -1864,15 +1864,21 @@ function showCurrentPhoto() {
   // 🎥 VÍDEO
   // ==========================================
   
-  if (photo.type === "video") {
-  
-    const videoUrl = getVideoUrl(photo);
-  
-    // Abrir o vídeo fora da aplicação
-    window.location.href = videoUrl;
-  
-    return;
-  }
+if (photo.type === "video") {
+
+  const videoUrl = getVideoUrl(photo);
+
+  // Fechar visualização da aplicação
+  lightbox.classList.add("hidden");
+
+  // Tentar abrir o vídeo diretamente
+  window.open(
+    videoUrl,
+    "_blank"
+  );
+
+  return;
+}
 
 
   // ==========================================
