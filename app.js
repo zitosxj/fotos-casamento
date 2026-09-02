@@ -14,7 +14,7 @@ const SCRIPT_URL =
 //
 // A segurança REAL também está no Apps Script.
 
-const EVENT_CODE = "OLIVIA";
+const EVENT_CODE = "OLIVIA2026";
 
 // ==========================================
 // 🎥 TAMANHO MÁXIMO DOS VÍDEOS
