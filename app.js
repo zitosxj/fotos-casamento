@@ -15,6 +15,7 @@ const SCRIPT_URL =
 // A segurança REAL também está no Apps Script.
 
 const EVENT_CODE = "OLIVIA2026";
+const VIEW_CODE = "CONVIDADO2026";
 
 // ==========================================
 // 🎥 TAMANHO MÁXIMO DOS VÍDEOS
@@ -181,6 +182,7 @@ let selectedFiles = [];
 let galleryPhotos = [];
 let filteredGalleryPhotos = [];
 let currentPhotoIndex = 0;
+let accessMode = null;
 
 // ==========================================
 // CACHE DA GALERIA
@@ -314,9 +316,7 @@ window.addEventListener(
       installModal.classList.remove(
         "hidden"
       );
-
     }
-
   }
 );
 
@@ -331,38 +331,29 @@ installAppButton.addEventListener(
 
     if (!deferredInstallPrompt) return;
 
-
     // Mostrar janela oficial
-
     deferredInstallPrompt.prompt();
 
-
     // Esperar escolha do utilizador
-
     const result =
       await deferredInstallPrompt.userChoice;
-
 
     console.log(
       "Resultado instalação:",
       result.outcome
     );
 
-
     // Limpar
 
     deferredInstallPrompt = null;
-
 
     // Fechar janela
 
     installModal.classList.add(
       "hidden"
     );
-
   }
 );
-
 
 // ==========================================
 // FECHAR
@@ -373,15 +364,12 @@ function closeInstallFunction() {
   installModal.classList.add(
     "hidden"
   );
-
 }
-
 
 closeInstallModal.addEventListener(
   "click",
   closeInstallFunction
 );
-
 
 laterInstallButton.addEventListener(
   "click",
@@ -393,30 +381,84 @@ laterInstallButton.addEventListener(
 // ==========================================
 
 function enterApp() {
-
   const code =
     eventCode.value.trim().toUpperCase();
 
+  // ==========================================
+  // 🔐 ACESSO COMPLETO
+  // ==========================================
 
-  if (code !== EVENT_CODE) {
+  if (code === EVENT_CODE) {
+    accessMode = "full";
+  }
 
+  // ==========================================
+  // 👀 APENAS GALERIA
+  // ==========================================
+
+  else if (code === VIEW_CODE) {
+    accessMode = "view";
+  }
+
+  // ==========================================
+  // ❌ CÓDIGO INVÁLIDO
+  // ==========================================
+
+  else {
     loginError.textContent =
       "O código não está correto.";
-
     return;
-
   }
-  
-const accessUntil = Date.now() + (24 * 60 * 60 * 1000);
 
-localStorage.setItem(
-  "weddingAccessUntil",
-  accessUntil.toString()
-);
+  // ==========================================
+  // 💾 GUARDAR ACESSO DURANTE 24 HORAS
+  // ==========================================
+
+  const accessUntil =
+    Date.now() +
+    (24 * 60 * 60 * 1000);
+
+  localStorage.setItem(
+    "weddingAccessUntil",
+    accessUntil.toString()
+  );
+
+  // Guardar tipo de acesso
+  localStorage.setItem(
+    "weddingAccessMode",
+    accessMode
+  );
+
+
+  // ==========================================
+  // 🚪 ENTRAR NA APP
+  // ==========================================
 
   loginScreen.classList.add("hidden");
   appScreen.classList.remove("hidden");
-  openUpload();
+
+
+  // ==========================================
+  // 👀 APENAS GALERIA
+  // ==========================================
+
+  if (accessMode === "view") {
+    // Esconder separador de upload
+    uploadTab.classList.add("hidden");
+
+    // Abrir diretamente a galeria
+    openGallery();
+  }
+
+  // ==========================================
+  // 📸 ACESSO COMPLETO
+  // ==========================================
+
+  else {
+    // Garantir que o separador aparece
+    uploadTab.classList.remove("hidden");
+    openUpload();
+  }
 }
 
 
@@ -448,12 +490,67 @@ const accessUntil = Number(
   localStorage.getItem("weddingAccessUntil")
 );
 
-if (accessUntil && Date.now() < accessUntil) {
+const savedAccessMode =
+  localStorage.getItem(
+    "weddingAccessMode"
+  );
+
+
+if (
+  accessUntil &&
+  Date.now() < accessUntil &&
+  savedAccessMode
+) {
+
+  // Recuperar tipo de acesso
+
+  accessMode =
+    savedAccessMode;
+
+
+  // Entrar diretamente
+
   loginScreen.classList.add("hidden");
+
   appScreen.classList.remove("hidden");
 
+
+  // ==========================================
+  // 👀 APENAS GALERIA
+  // ==========================================
+
+  if (accessMode === "view") {
+
+    uploadTab.classList.add("hidden");
+
+    openGallery();
+
+  }
+
+  // ==========================================
+  // 📸 ACESSO COMPLETO
+  // ==========================================
+
+  else {
+
+    uploadTab.classList.remove("hidden");
+
+    openUpload();
+
+  }
+
 } else {
-  localStorage.removeItem("weddingAccessUntil");
+
+  // Limpar acessos antigos
+
+  localStorage.removeItem(
+    "weddingAccessUntil"
+  );
+
+  localStorage.removeItem(
+    "weddingAccessMode"
+  );
+
 }
 
 
@@ -1005,6 +1102,13 @@ uploadProgressText.textContent =
 uploadButton.addEventListener(
   "click",
   async () => {
+
+    // 🔐 Verificar permissão
+    if (accessMode !== "full") {
+      uploadStatus.textContent =
+        "Não tens permissão para carregar ficheiros.";
+      return;
+    }
 
     if (!selectedFiles.length) {
 uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥";
@@ -2325,6 +2429,11 @@ changeCodeButton.addEventListener(
       "weddingAccessUntil"
     );
 
+    localStorage.removeItem(
+  "weddingAccessMode"
+);
+
+    accessMode = null;
     appScreen.classList.add("hidden");
     loginScreen.classList.remove("hidden");
     eventCode.value = "";
