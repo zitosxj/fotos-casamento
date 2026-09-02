@@ -164,6 +164,16 @@ const uploadProgressList =
   document.getElementById("uploadProgressList");
 
 // ==========================================
+// 🎥 AVISO DOS VÍDEOS
+// ==========================================
+
+const videoWarningModal =
+  document.getElementById("videoWarningModal");
+
+const closeVideoWarning =
+  document.getElementById("closeVideoWarning");
+
+// ==========================================
 // ESTADO
 // ==========================================
 
@@ -1652,6 +1662,40 @@ function escapeHtml_(text) {
 }
 
 // ==========================================
+// 🎥 MOSTRAR AVISO DOS VÍDEOS
+// ==========================================
+
+function showVideoWarning() {
+  // Mostrar apenas uma vez por sessão
+  const alreadyShown =
+    sessionStorage.getItem(
+      "videoWarningShown"
+    );
+
+  if (alreadyShown) {
+    return;
+  }
+
+  videoWarningModal.classList.remove(
+    "hidden"
+  );
+}
+
+// ==========================================
+// FECHAR AVISO DOS VÍDEOS
+// ==========================================
+
+closeVideoWarning.addEventListener(
+  "click",
+  () => {
+
+    videoWarningModal.classList.add("hidden");
+
+    // Guardar que já foi mostrado nesta sessão
+    sessionStorage.setItem("videoWarningShown","true");
+  }
+);
+// ==========================================
 // MOSTRAR GALERIA
 // ==========================================
 
@@ -1885,10 +1929,16 @@ else {
 
 }
 
-        item.addEventListener(
-          "click",
-          () => openLightbox(realIndex)
-        );
+item.addEventListener(
+  "click",
+  () => {
+    if (photo.type === "video") {
+      showVideoWarning();
+      return;
+    }
+    openLightbox(realIndex);
+  }
+);
 
 
         folderGrid.appendChild(item);
@@ -2067,29 +2117,13 @@ function showCurrentPhoto() {
   }
 
 
-  // ==========================================
-  // 🎥 VÍDEO
-  // ==========================================
-  
-/*if (photo.type === "video") {
+// ==========================================
+// 🎥 VÍDEO
+// ==========================================
 
-  const videoUrl = getVideoUrl(photo);
-
-  // Fechar visualização da aplicação
-  lightbox.classList.add("hidden");
-
-  // Tentar abrir o vídeo diretamente
-  window.open(
-    videoUrl,
-    "_blank"
-  );
-
-  return;
-}*/
-  
 if (photo.type === "video") {
 
-  // Mostrar apenas a miniatura do vídeo
+  // Mostrar apenas a miniatura
   lightboxImage.src =
     photo.thumbnail ||
     `https://drive.google.com/thumbnail?id=${photo.id}&sz=w1000`;
@@ -2100,45 +2134,23 @@ if (photo.type === "video") {
 
   lightboxImage.classList.remove("hidden");
 
-  // ==========================================
-  // 💬 MOSTRAR AVISO APENAS UMA VEZ
-  // ==========================================
-  const videoMessageSeen =
-    sessionStorage.getItem("videoMessageSeen");
-
-  if (!videoMessageSeen) {
-    alert(
-      "🎥 Os vídeos foram enviados para guardar este momento especial!\n\n" +
-      "A reprodução de vídeos não está disponível na aplicação.\n\n" +
-      "💗 Depois do casamento, todos os vídeos serão reunidos para criar uma recordação especial!"
-    );
-    sessionStorage.setItem(
-      "videoMessageSeen",
-      "true"
-    );
-  }
   return;
 }
 
-  // ==========================================
-  // 📸 FOTOGRAFIA
-  // ==========================================
-
-  lightboxImage.src =
-    photo.url;
 
 
-  lightboxImage.alt =
-    photo.name ||
-    "Fotografia do casamento";
+// ==========================================
+// 📸 FOTOGRAFIA
+// ==========================================
 
+lightboxImage.src =
+  photo.url;
 
-  lightboxImage.classList.remove(
-    "hidden"
-  );
+lightboxImage.alt =
+  photo.name ||
+  "Fotografia do casamento";
 
-}
-
+lightboxImage.classList.remove("hidden");
 // ==========================================
 // FECHAR LIGHTBOX
 // ==========================================
