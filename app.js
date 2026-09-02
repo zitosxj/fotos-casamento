@@ -1507,9 +1507,16 @@ function renderGallery() {
 
   Object.keys(folders)
 
-    .sort((a, b) =>
-      a.localeCompare(b, "pt")
-    )
+  .sort((a, b) => {
+
+    // 📁 Geral aparece sempre primeiro
+    if (a === "Geral") return -1;
+    if (b === "Geral") return 1;
+
+    // 📁 Restantes por ordem alfabética
+    return a.localeCompare(b, "pt");
+
+  })
 
     .forEach(folderName => {
 
