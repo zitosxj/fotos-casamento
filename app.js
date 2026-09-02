@@ -180,6 +180,205 @@ const GALLERY_CACHE_KEY = "weddingGalleryCache";
 const GALLERY_CACHE_TIME = "weddingGalleryCacheTime";
 
 // ==========================================
+// 📲 INSTALAÇÃO DA PWA
+// ==========================================
+
+let deferredInstallPrompt = null;
+
+
+// ELEMENTOS
+
+const installModal =
+  document.getElementById("installModal");
+
+const installAppButton =
+  document.getElementById("installAppButton");
+
+const iosInstallInstructions =
+  document.getElementById(
+    "iosInstallInstructions"
+  );
+
+const closeInstallModal =
+  document.getElementById(
+    "closeInstallModal"
+  );
+
+const laterInstallButton =
+  document.getElementById(
+    "laterInstallButton"
+  );
+
+
+// ==========================================
+// DETETAR IPHONE / IPAD
+// ==========================================
+
+function isIOS() {
+
+  return (
+    /iPad|iPhone|iPod/.test(
+      navigator.userAgent
+    )
+    ||
+    (
+      navigator.platform === "MacIntel"
+      &&
+      navigator.maxTouchPoints > 1
+    )
+  );
+
+}
+
+
+// ==========================================
+// VERIFICAR SE JÁ ESTÁ INSTALADA
+// ==========================================
+
+function isAppInstalled() {
+
+  return (
+    window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches
+    ||
+    window.navigator.standalone === true
+  );
+
+}
+
+
+// ==========================================
+// ANDROID / PC
+// ==========================================
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    // Impedir popup automático do browser
+
+    event.preventDefault();
+
+    // Guardar evento para usar no botão
+
+    deferredInstallPrompt = event;
+
+
+    // Mostrar botão se ainda não estiver instalada
+
+    if (!isAppInstalled()) {
+
+      installAppButton.classList.remove(
+        "hidden"
+      );
+
+      installModal.classList.remove(
+        "hidden"
+      );
+
+    }
+
+  }
+);
+
+
+// ==========================================
+// IPHONE
+// ==========================================
+
+window.addEventListener(
+  "load",
+  () => {
+
+    if (
+      isIOS()
+      &&
+      !isAppInstalled()
+    ) {
+
+      iosInstallInstructions.classList.remove(
+        "hidden"
+      );
+
+      installModal.classList.remove(
+        "hidden"
+      );
+
+    }
+
+  }
+);
+
+
+// ==========================================
+// CLICAR EM INSTALAR
+// ==========================================
+
+installAppButton.addEventListener(
+  "click",
+  async () => {
+
+    if (!deferredInstallPrompt) return;
+
+
+    // Mostrar janela oficial
+
+    deferredInstallPrompt.prompt();
+
+
+    // Esperar escolha do utilizador
+
+    const result =
+      await deferredInstallPrompt.userChoice;
+
+
+    console.log(
+      "Resultado instalação:",
+      result.outcome
+    );
+
+
+    // Limpar
+
+    deferredInstallPrompt = null;
+
+
+    // Fechar janela
+
+    installModal.classList.add(
+      "hidden"
+    );
+
+  }
+);
+
+
+// ==========================================
+// FECHAR
+// ==========================================
+
+function closeInstallFunction() {
+
+  installModal.classList.add(
+    "hidden"
+  );
+
+}
+
+
+closeInstallModal.addEventListener(
+  "click",
+  closeInstallFunction
+);
+
+
+laterInstallButton.addEventListener(
+  "click",
+  closeInstallFunction
+);
+
+// ==========================================
 // LOGIN
 // ==========================================
 
