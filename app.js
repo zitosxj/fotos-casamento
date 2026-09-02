@@ -2151,6 +2151,9 @@ lightboxImage.alt =
   "Fotografia do casamento";
 
 lightboxImage.classList.remove("hidden");
+
+}
+
 // ==========================================
 // FECHAR LIGHTBOX
 // ==========================================
@@ -2303,31 +2306,13 @@ function openMenuFunction() {
 
 
 function closeMenuFunction() {
-
   sideMenu.classList.remove("open");
-
   menuOverlay.classList.remove("open");
-
 }
 
-
-menuButton.addEventListener(
-  "click",
-  openMenuFunction
-);
-
-
-closeMenu.addEventListener(
-  "click",
-  closeMenuFunction
-);
-
-
-menuOverlay.addEventListener(
-  "click",
-  closeMenuFunction
-);
-
+menuButton.addEventListener("click", openMenuFunction);
+closeMenu.addEventListener("click", closeMenuFunction);
+menuOverlay.addEventListener("click",closeMenuFunction);
 
 // ==========================================
 // ALTERAR CÓDIGO / SAIR
@@ -2336,25 +2321,16 @@ menuOverlay.addEventListener(
 changeCodeButton.addEventListener(
   "click",
   () => {
-
     localStorage.removeItem(
       "weddingAccessUntil"
     );
 
-
     appScreen.classList.add("hidden");
-
     loginScreen.classList.remove("hidden");
-
-
     eventCode.value = "";
-
-
     closeMenuFunction();
-
   }
 );
-
 
 // ==========================================
 // SERVICE WORKER
@@ -2369,8 +2345,6 @@ if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register(
         "sw.js"
       );
-
     }
   );
-
 }
