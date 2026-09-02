@@ -1883,11 +1883,24 @@ function showCurrentPhoto() {
   
 if (photo.type === "video") {
 
-  const videoUrl = getVideoUrl(photo);
+  // Mostrar apenas a miniatura do vídeo
+  lightboxImage.src =
+    photo.thumbnail ||
+    `https://drive.google.com/thumbnail?id=${photo.id}&sz=w1000`;
 
-  lightbox.classList.add("hidden");
+  lightboxImage.alt =
+    photo.name ||
+    "Vídeo do casamento";
 
-  window.location.href = videoUrl;
+  lightboxImage.classList.remove("hidden");
+
+
+  // Mensagem para o utilizador
+  alert(
+    "🎥 Este vídeo foi enviado para a galeria.\n\n" +
+    "A reprodução de vídeos não está disponível na aplicação.\n\n" +
+    "💗 Depois do casamento, todos os vídeos serão reunidos para criar uma recordação especial!"
+  );
 
   return;
 }
