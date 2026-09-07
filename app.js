@@ -18,6 +18,29 @@ const EVENT_CODE = "1209";
 const VIEW_CODE = "O&L";
 
 // ==========================================
+// 👤 ÚLTIMO NOME UTILIZADO
+// ==========================================
+
+const PARTICIPANT_NAME_KEY = "weddingParticipantName";
+
+function loadParticipantName() {
+  const savedName = localStorage.getItem(PARTICIPANT_NAME_KEY);
+
+  if (savedName && participantName) {
+    participantName.value = savedName;
+  }
+}
+
+function saveParticipantName() {
+  if (!participantName) return;
+  const name = participantName.value.trim();
+
+  if (name) {
+    localStorage.setItem(PARTICIPANT_NAME_KEY, name);
+  }
+}
+
+// ==========================================
 // 🎥 TAMANHO MÁXIMO DOS VÍDEOS
 // ==========================================
 const MAX_VIDEO_SIZE =
@@ -457,10 +480,9 @@ function enterApp() {
   else {
     // Garantir que o separador aparece
     uploadTab.classList.remove("hidden");
-    openUpload();
+    openGallery();
   }
 }
-
 
 // ENTER NO TECLADO
 
@@ -471,30 +493,18 @@ eventCode.addEventListener(
     if (event.key === "Enter") {
       enterApp();
     }
-
   }
 );
 
-
-enterButton.addEventListener(
-  "click",
-  enterApp
-);
-
+enterButton.addEventListener("click", enterApp);
 
 // ==========================================
 // MANTER SESSÃO
 // ==========================================
 
-const accessUntil = Number(
-  localStorage.getItem("weddingAccessUntil")
-);
+const accessUntil = Number(localStorage.getItem("weddingAccessUntil"));
 
-const savedAccessMode =
-  localStorage.getItem(
-    "weddingAccessMode"
-  );
-
+const savedAccessMode = localStorage.getItem("weddingAccessMode");
 
 if (
   accessUntil &&
@@ -503,28 +513,20 @@ if (
 ) {
 
   // Recuperar tipo de acesso
-
   accessMode =
     savedAccessMode;
 
-
   // Entrar diretamente
-
   loginScreen.classList.add("hidden");
-
   appScreen.classList.remove("hidden");
-
 
   // ==========================================
   // 👀 APENAS GALERIA
   // ==========================================
 
   if (accessMode === "view") {
-
     uploadTab.classList.add("hidden");
-
     openGallery();
-
   }
 
   // ==========================================
@@ -534,9 +536,7 @@ if (
   else {
 
     uploadTab.classList.remove("hidden");
-
-    openUpload();
-
+    openGallery();
   }
 
 } else {
@@ -1115,6 +1115,9 @@ uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥
       return;
     }
 
+    // Guardar nome utilizado
+    saveParticipantName();
+    
     // Bloquear botão durante o envio
     uploadButton.disabled = true;
 
@@ -1140,7 +1143,6 @@ uploadStatus.textContent = "Escolhe pelo menos uma fotografia ou vídeo 📸🎥
     ) {
 
       const file = selectedFiles[index];
-
 
       try {
 
@@ -2440,6 +2442,12 @@ changeCodeButton.addEventListener(
     closeMenuFunction();
   }
 );
+
+// ==========================================
+// 👤 CARREGAR ÚLTIMO NOME UTILIZADO
+// ==========================================
+
+loadParticipantName();
 
 // ==========================================
 // SERVICE WORKER
